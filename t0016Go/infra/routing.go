@@ -94,77 +94,65 @@ func routingV2(r *gin.Engine) {
 			vtubers.POST("/like", func(c *gin.Context) {})
 			vtubers.DELETE("/unlike", func(c *gin.Context) {})
 		}
-		videos := v2.Group("/videos")
+
+		// 従来のカラオケソング＝歌ではなく、カラオケ配信＝歌枠(動画)の意
+		karaokeVideos := v2.Group("/karaoke-videos")
 		{
-			live := videos.Group("/live-song")
+			karaokeVideos.GET("/", func(c *gin.Context) {})
+			karaokeVideos.POST("/create", func(c *gin.Context) {})
+			karaokeVideos.PUT("/update", func(c *gin.Context) {})
+			karaokeVideos.DELETE("/delete", func(c *gin.Context) {})
+			karaokeVideos.POST("/like", func(c *gin.Context) {}) // リソースのアクション？に対しては動詞を使うべきなのでlikeに
+			karaokeVideos.DELETE("/unlike", func(c *gin.Context) {})
+			songs := karaokeVideos.Group("/songs")
 			{
-				live.GET("/", func(c *gin.Context) {})
-				live.POST("/create", func(c *gin.Context) {})
-				live.PUT("/update", func(c *gin.Context) {})
-				live.DELETE("/delete", func(c *gin.Context) {})
-				live.POST("/like", func(c *gin.Context) {})
-				live.DELETE("/unlike", func(c *gin.Context) {})
-
-				songs := live.Group("/songs")
-				{
-					songs.GET("/", func(c *gin.Context) {})
-					songs.POST("/create", func(c *gin.Context) {})
-					songs.PUT("/update", func(c *gin.Context) {})
-					songs.DELETE("/delete", func(c *gin.Context) {})
-					songs.POST("/like", func(c *gin.Context) {})
-					songs.DELETE("/unlike", func(c *gin.Context) {})
-				}
-			}
-
-			// 従来のカラオケソングではなく、カラオケ配信＝歌枠の意
-			karaokes := videos.Group("/karaokes")
-			{
-				karaokes.GET("/", func(c *gin.Context) {})
-				karaokes.POST("/create", func(c *gin.Context) {})
-				karaokes.PUT("/update", func(c *gin.Context) {})
-				karaokes.DELETE("/delete", func(c *gin.Context) {})
-				karaokes.POST("/like", func(c *gin.Context) {}) // リソースのアクション？に対しては動詞を使うべきなのでlikeに
-				karaokes.DELETE("/unlike", func(c *gin.Context) {})
-				songs := karaokes.Group("/songs")
-				{
-					songs.GET("/", func(c *gin.Context) {})
-					songs.POST("/create", func(c *gin.Context) {})
-					songs.PUT("/update", func(c *gin.Context) {})
-					songs.DELETE("/delete", func(c *gin.Context) {})
-					songs.POST("/like", func(c *gin.Context) {})
-					songs.DELETE("/unlike", func(c *gin.Context) {})
-				}
-			}
-
-			multipleSongs := videos.Group("/multiple-songs-videos")
-			{
-				multipleSongs.GET("/", func(c *gin.Context) {})
-				multipleSongs.POST("/create", func(c *gin.Context) {})
-				multipleSongs.PUT("/update", func(c *gin.Context) {})
-				multipleSongs.DELETE("/delete", func(c *gin.Context) {})
-				multipleSongs.POST("/like", func(c *gin.Context) {})
-				multipleSongs.DELETE("/unlike", func(c *gin.Context) {})
-				songs := karaokes.Group("/songs")
-				{
-					songs.GET("/", func(c *gin.Context) {})
-					songs.POST("/create", func(c *gin.Context) {})
-					songs.PUT("/update", func(c *gin.Context) {})
-					songs.DELETE("/delete", func(c *gin.Context) {})
-					songs.POST("/like", func(c *gin.Context) {})
-					songs.DELETE("/unlike", func(c *gin.Context) {})
-				}
-			}
-			//
-			singleSongVideo := karaokes.Group("/single-song-videos")
-			{
-				singleSongVideo.GET("/", func(c *gin.Context) {})
-				singleSongVideo.POST("/create", func(c *gin.Context) {})
-				singleSongVideo.PUT("/update", func(c *gin.Context) {})
-				singleSongVideo.DELETE("/delete", func(c *gin.Context) {})
-				singleSongVideo.POST("/like", func(c *gin.Context) {})
-				singleSongVideo.DELETE("/unlike", func(c *gin.Context) {})
+				songs.GET("/", func(c *gin.Context) {})
+				songs.POST("/create", func(c *gin.Context) {})
+				songs.PUT("/update", func(c *gin.Context) {})
+				songs.DELETE("/delete", func(c *gin.Context) {})
+				songs.POST("/like", func(c *gin.Context) {})
+				songs.DELETE("/unlike", func(c *gin.Context) {})
 			}
 		}
+		liveVideos := v2.Group("/live-videos")
+		{
+			liveVideos.GET("/", func(c *gin.Context) {})
+			liveVideos.POST("/create", func(c *gin.Context) {})
+			liveVideos.PUT("/update", func(c *gin.Context) {})
+			liveVideos.DELETE("/delete", func(c *gin.Context) {})
+			liveVideos.POST("/like", func(c *gin.Context) {})
+			liveVideos.DELETE("/unlike", func(c *gin.Context) {})
+
+			songs := liveVideos.Group("/songs")
+			{
+				songs.GET("/", func(c *gin.Context) {})
+				songs.POST("/create", func(c *gin.Context) {})
+				songs.PUT("/update", func(c *gin.Context) {})
+				songs.DELETE("/delete", func(c *gin.Context) {})
+				songs.POST("/like", func(c *gin.Context) {})
+				songs.DELETE("/unlike", func(c *gin.Context) {})
+			}
+		}
+		originalSongVideos := v2.Group("/original-songs-videos")
+		{
+			originalSongVideos.GET("/", func(c *gin.Context) {})
+			originalSongVideos.POST("/create", func(c *gin.Context) {})
+			originalSongVideos.PUT("/update", func(c *gin.Context) {})
+			originalSongVideos.DELETE("/delete", func(c *gin.Context) {})
+			originalSongVideos.POST("/like", func(c *gin.Context) {})
+			originalSongVideos.DELETE("/unlike", func(c *gin.Context) {})
+		}
+		coveredSongVideos := v2.Group("/coverd-songs-videos")
+		{
+			coveredSongVideos.GET("/", func(c *gin.Context) {})
+			coveredSongVideos.POST("/create", func(c *gin.Context) {})
+			coveredSongVideos.PUT("/update", func(c *gin.Context) {})
+			coveredSongVideos.DELETE("/delete", func(c *gin.Context) {})
+			coveredSongVideos.POST("/like", func(c *gin.Context) {})
+			coveredSongVideos.DELETE("/unlike", func(c *gin.Context) {})
+		}
+
+		// hint : 動画以外のコンテンツが出てきても、ここで並列に扱う
 	}
 }
 
