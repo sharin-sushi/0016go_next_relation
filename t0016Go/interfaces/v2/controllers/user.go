@@ -6,12 +6,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sharin-sushi/0016go_next_relation/domain"
-	"github.com/sharin-sushi/0016go_next_relation/interfaces/controllers/common"
+	"github.com/sharin-sushi/0016go_next_relation/interfaces/v2/controllers/common"
 )
 
 var guestId = common.GetGuestListenerId()
 
-func (controller *Controller) CreateUser(c *gin.Context) {
+func (controller *Controller) SingUp(c *gin.Context) {
 	fmt.Printf("start `CreateUser` at interfaces/controllers/users.go \n")
 	var user domain.Listener
 	if err := c.ShouldBind(&user); err != nil {

@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sharin-sushi/0016go_next_relation/domain"
-	"github.com/sharin-sushi/0016go_next_relation/interfaces/controllers/common"
+	"github.com/sharin-sushi/0016go_next_relation/interfaces/v1/controllers/common"
 )
 
 func (controller *Controller) GetJoinVtubersMoviesKaraokes(c *gin.Context) {

@@ -12,3 +12,13 @@ make-env-app:
 
 make-env-api:
 	cd t0016Go && copy sample.env .env
+
+
+# TODO: localでエラーチェックしたい
+# .PHONY: build
+# run:
+# 	go build -v ./t0016Go/cmd/... 
+
+# .PHONY: test
+# run:
+# 	go test -v ./... 

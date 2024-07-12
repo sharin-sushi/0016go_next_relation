@@ -10,8 +10,8 @@ import (
 	"gorm.io/gorm"
 
 	domain "github.com/sharin-sushi/0016go_next_relation/domain"
-	"github.com/sharin-sushi/0016go_next_relation/interfaces/controllers/common"
 	"github.com/sharin-sushi/0016go_next_relation/interfaces/database"
+	"github.com/sharin-sushi/0016go_next_relation/interfaces/v1/controllers/common"
 )
 
 type SqlHandler struct {

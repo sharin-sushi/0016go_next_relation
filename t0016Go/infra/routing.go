@@ -2,14 +2,21 @@ package infra
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/sharin-sushi/0016go_next_relation/interfaces/controllers"
+	controllers1 "github.com/sharin-sushi/0016go_next_relation/interfaces/v1/controllers"
+	controllers2 "github.com/sharin-sushi/0016go_next_relation/interfaces/v2/controllers"
 )
 
 // 命名規則
 // https://github.com/sharin-sushi/0016go_next_relation/issues/71#issuecomment-1843543763
 
 func Routing(r *gin.Engine) {
-	controller := controllers.NewController(dbInit())
+	routingV1(r)
+	routingV2(r)
+}
+
+// フロントで移行でき次第、１つずつも呼び出してるメソッドと共に削除していく。
+func routingV1(r *gin.Engine) {
+	controller := controllers1.NewController(dbInit())
 
 	ver := r.Group("/v1")
 	{
@@ -17,9 +24,9 @@ func Routing(r *gin.Engine) {
 		{
 			users.POST("/signup", controller.CreateUser)
 			users.PUT("/login", controller.LogIn)
-			users.PUT("/logout", controllers.Logout)
+			users.PUT("/logout", controllers1.Logout) // dbアクセスしないから sqlHandlerのメソッドにしてないぽいそんな設計で良いのか
 			users.DELETE("/withdraw", controller.LogicalDeleteUser)
-			users.GET("/gestlogin", controllers.GuestLogIn)
+			users.GET("/gestlogin", controllers1.GuestLogIn) // dbアクセスしないから gin.sqlHandlerのメソッドにしてないぽいそんな設計で良いのか
 			users.GET("/profile", controller.GetListenerProfile)
 			users.GET("/mypage", controller.ListenerPage)
 		}
@@ -27,7 +34,6 @@ func Routing(r *gin.Engine) {
 		{
 			vcontents.GET("/", controller.ReturnTopPageData)
 			vcontents.GET("/vtuber/:kana", controller.ReturnVtuberPageData)
-			// TODO : v2 : 単数形に
 			vcontents.GET("/sings", controller.GetJoinVtubersMoviesKaraokes)
 			vcontents.GET("/original-song", controller.ReturnOriginalSongPage)
 
@@ -61,6 +67,92 @@ func Routing(r *gin.Engine) {
 			fav.POST("/favorite/karaoke", controller.SaveKaraokeFavorite)
 			fav.DELETE("/unfavorite/karaoke", controller.DeleteKaraokeFavorite)
 		}
+	}
+
+}
+
+func routingV2(r *gin.Engine) {
+	controller := controllers2.NewController(dbInit())
+	var v2 = r.Group("/v2")
+	{
+		users := v2.Group("/users")
+		{
+			users.GET("/", controller.LogIn)          //　GETに変えた注意
+			users.GET("/logout", controllers2.Logout) // フロントに任せて良くない？→微妙
+			users.POST("/signup", controller.SingUp)
+			users.DELETE("/withdraw", controller.LogicalDeleteUser)
+			users.GET("/guest", controllers2.GuestLogIn)
+			users.GET("/profile", controller.GetListenerProfile)
+			users.GET("/like-karaoke", func(c *gin.Context) {}) //　使わないのでは？
+		}
+		vtubers := v2.Group("/vtubers")
+		{
+			vtubers.GET("/", func(c *gin.Context) {})
+			vtubers.POST("/create", func(c *gin.Context) {})
+			vtubers.PUT("/update", func(c *gin.Context) {})
+			vtubers.DELETE("/delete", func(c *gin.Context) {})
+			vtubers.POST("/like", func(c *gin.Context) {})
+			vtubers.DELETE("/unlike", func(c *gin.Context) {})
+		}
+
+		// 従来のカラオケソング＝歌ではなく、カラオケ配信＝歌枠(動画)の意
+		karaokeVideos := v2.Group("/karaoke-videos")
+		{
+			karaokeVideos.GET("/", func(c *gin.Context) {})
+			karaokeVideos.POST("/create", func(c *gin.Context) {})
+			karaokeVideos.PUT("/update", func(c *gin.Context) {})
+			karaokeVideos.DELETE("/delete", func(c *gin.Context) {})
+			karaokeVideos.POST("/like", func(c *gin.Context) {}) // リソースのアクション？に対しては動詞を使うべきなのでlikeに
+			karaokeVideos.DELETE("/unlike", func(c *gin.Context) {})
+			songs := karaokeVideos.Group("/songs")
+			{
+				songs.GET("/", func(c *gin.Context) {})
+				songs.POST("/create", func(c *gin.Context) {})
+				songs.PUT("/update", func(c *gin.Context) {})
+				songs.DELETE("/delete", func(c *gin.Context) {})
+				songs.POST("/like", func(c *gin.Context) {})
+				songs.DELETE("/unlike", func(c *gin.Context) {})
+			}
+		}
+		liveVideos := v2.Group("/live-videos")
+		{
+			liveVideos.GET("/", func(c *gin.Context) {})
+			liveVideos.POST("/create", func(c *gin.Context) {})
+			liveVideos.PUT("/update", func(c *gin.Context) {})
+			liveVideos.DELETE("/delete", func(c *gin.Context) {})
+			liveVideos.POST("/like", func(c *gin.Context) {})
+			liveVideos.DELETE("/unlike", func(c *gin.Context) {})
+
+			songs := liveVideos.Group("/songs")
+			{
+				songs.GET("/", func(c *gin.Context) {})
+				songs.POST("/create", func(c *gin.Context) {})
+				songs.PUT("/update", func(c *gin.Context) {})
+				songs.DELETE("/delete", func(c *gin.Context) {})
+				songs.POST("/like", func(c *gin.Context) {})
+				songs.DELETE("/unlike", func(c *gin.Context) {})
+			}
+		}
+		originalSongVideos := v2.Group("/original-songs-videos")
+		{
+			originalSongVideos.GET("/", func(c *gin.Context) {})
+			originalSongVideos.POST("/create", func(c *gin.Context) {})
+			originalSongVideos.PUT("/update", func(c *gin.Context) {})
+			originalSongVideos.DELETE("/delete", func(c *gin.Context) {})
+			originalSongVideos.POST("/like", func(c *gin.Context) {})
+			originalSongVideos.DELETE("/unlike", func(c *gin.Context) {})
+		}
+		coveredSongVideos := v2.Group("/coverd-songs-videos")
+		{
+			coveredSongVideos.GET("/", func(c *gin.Context) {})
+			coveredSongVideos.POST("/create", func(c *gin.Context) {})
+			coveredSongVideos.PUT("/update", func(c *gin.Context) {})
+			coveredSongVideos.DELETE("/delete", func(c *gin.Context) {})
+			coveredSongVideos.POST("/like", func(c *gin.Context) {})
+			coveredSongVideos.DELETE("/unlike", func(c *gin.Context) {})
+		}
+
+		// hint : 動画以外のコンテンツが出てきても、ここで並列に扱う
 	}
 }
 
