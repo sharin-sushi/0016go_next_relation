@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'　←今はやらなくて良いらしい
 
 # 正直、dbだけdocker-composeで他はTerminalやコマンドプロンプトで起動する
 # (以下のapi, appをコメントアウトしてdocker-compose up)
@@ -18,15 +18,15 @@ services:
       retries: 10
     ports:
       - "3306:3306"
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci 
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
   api:
-    build: 
+    build:
       context: ./t0016Go
     container_name: v_kara_api
     env_file: ./t0016Go/.env
     environment:
-      - IS_DOCKER_COMPOSE=true 
+      - IS_DOCKER_COMPOSE=true
     stdin_open: true
     tty: true
     volumes:
@@ -37,16 +37,21 @@ services:
     ports:
       - "8080:8080"
 
+  # `make db-be` でdb, apiのみをdocker composeで起動できます
   app:
     build:
       context: ./t0016Next
     container_name: v_kara_app
     env_file: ./t0016Next/.env
     environment:
-      - IS_DOCKER_COMPOSE=true 
+      - IS_DOCKER_COMPOSE=true
     stdin_open: true
     tty: true
     volumes:
       - ./t0016Next/myapp:/app/src
     ports:
       - "80:80"
+############
+# docker compose up db
+# cd /t0016Go/cmd && go run .
+

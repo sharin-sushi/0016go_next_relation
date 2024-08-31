@@ -53,6 +53,7 @@ func dbInit() database.SqlHandler {
 	dbUrl := ""
 
 	if common.IsOnCloud {
+		fmt.Println("common.IsOnCloud : true")
 		//クラウド環境
 		dbUrl = os.Getenv("RDS_END_PIONT")
 		dbName = os.Getenv("AWS_DATABASE")
@@ -68,6 +69,7 @@ func dbInit() database.SqlHandler {
 			pw = "shari_sushi"
 		}
 	} else if common.IsOnLoclaWithDockerCompose {
+		fmt.Println("common.IsOnLoclaWithDockerCompose : true")
 		// Golangはローカルのdocker-compose or  VSCodeで起動
 		// MySQLはローカルのdocker上(compose使用) で起動
 		if user == "" {
@@ -76,6 +78,7 @@ func dbInit() database.SqlHandler {
 		dbUrl = "v_kara_db"
 		dbName = os.Getenv("MYSQL_DATABASE")
 	} else if common.IsOnLoclaWithOutDockerCompose {
+		fmt.Println("develop env. is unknown")
 		// Golangはローカルのdocker-compose or  VSCodeで起動
 		// MySQLはローカルでdockerを使用せずに起動
 		if user == "" {
@@ -83,6 +86,13 @@ func dbInit() database.SqlHandler {
 		}
 		dbUrl = "localhost"
 		dbName = os.Getenv("MYSQL_DATABASE")
+	} else {
+		fmt.Println("common.hoge : false ")
+
+		dbUrl = "localhost"
+		dbName = "db"
+		user = "user"
+		pw = "password"
 	}
 
 	path := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=true", user, pw, dbUrl, port, dbName)
