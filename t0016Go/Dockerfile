@@ -21,6 +21,7 @@ RUN go mod download
 
 COPY . .
 
+# C言語との統合を防いで少しでも軽くする…らしい。
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main cmd/main.go
 
 #### 実行ステージ ####
