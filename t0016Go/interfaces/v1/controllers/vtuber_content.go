@@ -600,5 +600,3 @@ func (controller *Controller) ReturnTestpage(c *gin.Context) {
 	return
 
 }
-
-var UpdateData = "2024/03/05 20"
