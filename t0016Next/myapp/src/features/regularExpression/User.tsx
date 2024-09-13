@@ -1,29 +1,29 @@
-const ListenerNamePattern = /[a-z\d\-]{3,255}/i;
+const ListenerNamePattern = /^[a-z\dあ-ん\-]{3,255}$/i
 
 export const ValidateListenerName = {
-    required: true,
-    pattern: {
-        value: ListenerNamePattern,
-        message: "nameは3文字以上必要です。大文字、小文字、数字、-+を使えます。"
-    }
-};
+	required: true,
+	pattern: {
+		value: ListenerNamePattern,
+		message: "※英数字かな、+-で3文字以上必要です。"
+	}
+}
 
-const EmailPattern = /[\w+\-]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]*/i;
+const EmailPattern = /^[\w.\-]+@[\w\-]+\.[\w.\-]+$/i
 
 export const ValidateEmail = {
-    required: true,
-    pattern: {
-        value: EmailPattern,
-        message: "emailの形式で入力してください。"
-    }
-};
+	required: true,
+	pattern: {
+		value: EmailPattern,
+		message: "※emailの形式で入力してください。"
+	}
+}
 
-const PasswordPattern = /[a-z\d\-]{4,255}/i;
+const PasswordPattern = /^[a-z\d\-]{4,255}$/i
 
 export const ValidatePassword = {
-    required: true,
-    pattern: {
-        value: PasswordPattern,
-        message: "Passwordは4文字以上必要です"
-    }
-};
+	required: true,
+	pattern: {
+		value: PasswordPattern,
+		message: "※英数字、+-で4文字以上必要です"
+	}
+}
