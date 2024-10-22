@@ -48,9 +48,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/myapp/.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 80
+EXPOSE 3005
 
-ENV PORT=80
+ENV PORT=3005
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
@@ -61,18 +61,9 @@ CMD ["node", "server.js"]
 # single stage build
 # ##########
 # FROM node:18-alpine
-
-# WORKDIR /app
-
+# WORKDIR /app/src 
 # COPY ./myapp .
-
 # RUN npm install
-
-# EXPOSE 80
-
-# # ↓ならRUN npm run build必要（だけどちゃんと機能してない。pathが悪いかも？）
 # RUN npm run build
+# EXPOSE 80
 # CMD ["npm", "run", "start"]
-
-# # ↓ならRUN npm run build不要（だけど遅いDoockerだと顕著だし、本番環境と遠い）
-# # CMD ["npm", "run", "dev"]
