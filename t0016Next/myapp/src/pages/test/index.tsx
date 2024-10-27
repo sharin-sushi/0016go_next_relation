@@ -53,7 +53,8 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
   return (
     <Layout pageName={pageName} isSignin={isSignin}>
       <TestLink thisPageNum={pageNum} />
-      <div>2024.10.21</div>
+      <div>2024.10.28</div>
+      <span>multistage, port 80</span>
       <div className="flex justify-center md:flex-row flex-col m-6">
         <div className="w-full h-max p-8 bg-black">
           〇環境変数取得テスト１ <br />

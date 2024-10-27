@@ -60,10 +60,10 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
 
   return (
     <Layout pageName={pageName} isSignin={isSignin}>
-      <div className="inline-block flex-col pt-1 items-center justify-center">
-        <div className="flex flex-col ">
+      <div className="pt-1">
+        <div className="flex flex-col items-center">
           <hgroup className="pb-1 md:pb-3 ">
-            <h1 className="flex justify-center text-xl sm:text-2xl md:text-3xl font-bold underline ">
+            <h1 className="flex justify-center text-xl sm:text-2xl md:text-3xl font-bold underline">
               V-Karaoke (VTuber-Karaoke-Lists)
             </h1>
             <h2 className="flex justify-center text-sm  md:text-base">
@@ -72,25 +72,25 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
             <h2 className="flex justify-center text-xs ms:text-sm md:text-base ">
               「ささっと把握」、「さくっと再生」、「ばばっと布教」
             </h2>
-
-            <h3 className="flex justify-center pt-4 w-atuo">
-              <div className="flex-col ">
-                〇お知らせ <br />
+            <h3 className="flex flex-col max-w-[1000px] mt-2">
+              <div>〇お知らせ</div>
+              <div className="ml-4">
                 <li>
                   <Link href="/sings/karaoke" className="font-bold">
                     「カラオケ」
                   </Link>
-                  ページの検索機能を強化しました(6/3)
+                  ページの検索機能を強化(6/3)
                 </li>
                 <li>
                   <Link href="/user/signin" className="font-bold">
                     「ログイン」
                   </Link>
-                  できない不具合を修正とデザイン改善を実施しました(10/20)
+                  ページのデザインとエラー表示の改善、ログインできない不具合の修正(10/18)
                 </li>
-                <li className="font-bold">
-                  データベースにアクセスできない不具合が発生しています。復旧中ですので、再度のご利用をお願いします。(10/20)
+                <li className="">
+                  10/20～10/22にかけてサイトが不安定となり申し訳ありませんでした。引き続きご利用いただけますと幸いです。
                 </li>
+                <div className="pl-6">機能追加を順次予定しております。</div>
                 {/* <li>本サイトは視聴機能付きの「ユーザー参加型データベース」です。ご登録をお願いします！</li> */}
               </div>
             </h3>
