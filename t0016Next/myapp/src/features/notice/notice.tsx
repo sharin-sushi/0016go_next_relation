@@ -6,40 +6,69 @@ export const TopPageNotice = () => {
   const [isDisplay, setIsDisplay] = useState(false);
 
   return (
-    <>
-      {isDisplay && (
-        <div
-          className="absolute z-40 top-[-150px] h-52 w-[86%] md:w-96  bg-[#B7A692]
-            p-2 pt-5 rounded-2xl shadow-lg shadow-black"
-        >
-          <div className="flex flex-col item-center md:text-2xl font-bold">
-            <span className="mx-auto">登録完了しました。</span>
-            <span className="flex mx-auto">
-              ページ内のリストを更新しますか？
-            </span>
+    <div className="flex flex-col items-center max-w-[1000px] m-auto mt-2">
+      <div>
+        <div className="flex items-end">
+          <div className="items-start">〇お知らせ</div>
+          <div
+            className="flex text-xs justify-center rounded-md h-[15px] w-[15px] m-0.5 bg-[#776D5C] hover:opacity-70 cursor-pointer"
+            onClick={() => setIsDisplay(true)}
+          >
+            ？
           </div>
-          <div className="flex flex-col md:flex-row md:text-xl mt-2 md:mt-6">
-            <button
-              type="button"
-              onClick={() => setIsDisplay(false)}
-              className={`${ToClickTW.boldChoice} p-2 mx-auto mt-4 md:my-0 font-bold`}
+        </div>
+      </div>
+      <div className="ml-4">
+        <li>{NoticeItems[0].content}</li>
+        <li>{NoticeItems[1].content}</li>
+        <li>{NoticeItems[2].content}</li>
+        {/* <li>本サイトは視聴機能付きの「ユーザー参加型データベース」です。ご登録をお願いします！</li> */}
+      </div>
+
+      {isDisplay && (
+        <div className="absolute flex items-center justify-center z-10 top-0 left-0 h-full w-full">
+          <div
+            className="h-full w-full bg-black opacity-50"
+            onClick={() => setIsDisplay(false)}
+          />
+
+          <div
+            className="absolute z-40 flex flex-col top-[150px] items-center md:max-w-3xl w-[90%] p-2 pt-5
+            bg-[#B7A692] rounded-2xl shadow-lg shadow-black"
+          >
+            <div className="ml-4 text-black">
+              <div className="font-bold">お知らせ全件</div>
+              {NoticeItems.map((item) => (
+                <li key={item.id}>{item.content}</li>
+              ))}
+              {/* <li>本サイトは視聴機能付きの「ユーザー参加型データベース」です。ご登録をお願いします！</li> */}
+            </div>
+            <div
+              className={`${ToClickTW.regular} font-normal w-13`}
+              onClick={() => {
+                setIsDisplay(false);
+              }}
             >
-              入力を維持するために <br />
-              更新しない
-            </button>
+              閉じる
+            </div>
           </div>
         </div>
       )}
+    </div>
+  );
+};
 
-      <div>〇お知らせ</div>
-      <div className="ml-4">
-        <div className="pl-6">機能追加を順次予定しております。</div>
-        {NoticeItems.map((item) => (
-          <li key={item.id}>{item.content}</li>
-        ))}
-        {/* <li>本サイトは視聴機能付きの「ユーザー参加型データベース」です。ご登録をお願いします！</li> */}
-      </div>
-    </>
+const NoticeLink = ({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) => {
+  return (
+    <Link href={href} className="font-bold hover:opacity-50 hover:underline">
+      {children}
+    </Link>
   );
 };
 
@@ -50,30 +79,35 @@ type NoticeItem = {
 
 const NoticeItems: NoticeItem[] = [
   {
-    id: "notice-2024-06-03",
-    content: (
-      <>
-        <Link href="/sings/karaoke" className="font-bold">
-          「カラオケ」
-        </Link>
-        ページの検索機能を強化(6/3)
-      </>
-    ),
+    id: "notice-2024-10-22",
+    content: "10/20～10/22におけるサイトが不安定な問題の解決 (10/23)",
   },
+
   {
     id: "notice-2024-10-18",
     content: (
       <>
-        <Link href="/user/signin" className="font-bold">
-          「ログイン」
-        </Link>
-        ページのデザインとエラー表示の改善、ログインできない不具合の修正(10/18)
+        <NoticeLink href="/user/signin">「ログイン」</NoticeLink>
+        ページのデザインとエラー表示の改善、ログインできない不具合の修正 (10/18)
       </>
     ),
   },
   {
-    id: "notice-2024-10-22",
-    content:
-      "10/20～10/22におけるサイトが不安定な問題を解決しました。引き続きご利用いただけますと幸いです。",
+    id: "notice-2024-06-03",
+    content: (
+      <>
+        <NoticeLink href="/sings/karaoke">「カラオケ」</NoticeLink>
+        ページの検索機能を強化 (6/3)
+      </>
+    ),
+  },
+  {
+    id: "notice-2024-05-30",
+    content: (
+      <>
+        <NoticeLink href="https://x.com/i_mo_5">「妹望おいも」</NoticeLink>
+        誕生日(5/30)
+      </>
+    ),
   },
 ];

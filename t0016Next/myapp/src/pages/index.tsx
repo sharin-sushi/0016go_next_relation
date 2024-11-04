@@ -62,7 +62,8 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
   return (
     <Layout pageName={pageName} isSignin={isSignin}>
       <div className="pt-1">
-        <TitleMessage />
+        <TitleGroup />
+        <TopPageNotice />
 
         <div className="flex flex-col justify-center">
           <div
@@ -178,7 +179,7 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
 };
 export default TopPage;
 
-const TitleMessage = () => {
+const TitleGroup = () => {
   return (
     <div className="flex flex-col items-center">
       <hgroup className="pb-1 md:pb-3 ">
@@ -191,9 +192,6 @@ const TitleMessage = () => {
         <h2 className="flex justify-center text-xs ms:text-sm md:text-base ">
           「ささっと把握」、「さくっと再生」、「ばばっと布教」
         </h2>
-        <h3 className="flex flex-col max-w-[1000px] mt-2">
-          <TopPageNotice />
-        </h3>
       </hgroup>
     </div>
   );
