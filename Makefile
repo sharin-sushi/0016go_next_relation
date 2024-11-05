@@ -1,11 +1,11 @@
 ####### 普段の開発向け
 .PHONY: run
 run:
-	cd t0016Go/cmd/t0016Go && go run main.go
+	cd t0016Go/cmd && go run main.go
 
 .PHONY: db-be
 db-be:
-	docker compose up db
+	docker compose up -d db
 	make run
 
 .PHONY: fe

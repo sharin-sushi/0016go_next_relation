@@ -21,6 +21,7 @@ import {
 import { ToClickTW } from "@/styles/tailwiind";
 import { ContextType } from "@/types/server";
 import Image from "next/image";
+import { TopPageNotice } from "@/features/notice/notice";
 
 const pageName = "Top";
 
@@ -61,41 +62,8 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
   return (
     <Layout pageName={pageName} isSignin={isSignin}>
       <div className="pt-1">
-        <div className="flex flex-col items-center">
-          <hgroup className="pb-1 md:pb-3 ">
-            <h1 className="flex justify-center text-xl sm:text-2xl md:text-3xl font-bold underline">
-              V-Karaoke (VTuber-Karaoke-Lists)
-            </h1>
-            <h2 className="flex justify-center text-sm  md:text-base">
-              「推し」の「歌枠」の聴きたい「歌」
-            </h2>
-            <h2 className="flex justify-center text-xs ms:text-sm md:text-base ">
-              「ささっと把握」、「さくっと再生」、「ばばっと布教」
-            </h2>
-            <h3 className="flex flex-col max-w-[1000px] mt-2">
-              <div>〇お知らせ</div>
-              <div className="ml-4">
-                <li>
-                  <Link href="/sings/karaoke" className="font-bold">
-                    「カラオケ」
-                  </Link>
-                  ページの検索機能を強化(6/3)
-                </li>
-                <li>
-                  <Link href="/user/signin" className="font-bold">
-                    「ログイン」
-                  </Link>
-                  ページのデザインとエラー表示の改善、ログインできない不具合の修正(10/18)
-                </li>
-                <li className="">
-                  10/20～10/22にかけてサイトが不安定となり申し訳ありませんでした。引き続きご利用いただけますと幸いです。
-                </li>
-                <div className="pl-6">機能追加を順次予定しております。</div>
-                {/* <li>本サイトは視聴機能付きの「ユーザー参加型データベース」です。ご登録をお願いします！</li> */}
-              </div>
-            </h3>
-          </hgroup>
-        </div>
+        <TitleGroup />
+        <TopPageNotice />
 
         <div className="flex flex-col justify-center">
           <div
@@ -107,7 +75,7 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
           >
             {/* 左側の要素 */}
             <div className="flex flex-col mr-1 ">
-              <div className="relative flex  justify-center">
+              <div className="relative flex justify-center">
                 <YouTubePlayer videoId={currentMovieId} start={start} />
               </div>
               <span className="relative flex md:top-2 justify-center md:mb-3">
@@ -151,47 +119,20 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
             </div>
           </div>
 
-          {vtubers.length == 0 && (
-            <div className="flex justify-center py-12">
-              <div className="flex justify-center bg-[#657261] font-bold text-xl p-6 max-w-[1200px]">
-                <span>
-                  データの取得に失敗したようです。
-                  <br />
-                  <br />
-                  ページを更新してもこの文章が表示される場合は
-                  <br />
-                  お手数ですが、
-                  <Link
-                    href="https://twitter.com/shari_susi"
-                    className="text-3xl text-[#b3d854] underline mx-2"
-                  >
-                    開発者のX
-                  </Link>
-                  にDMいただけますと幸いです。
-                  <br />
-                  <br />
-                  サーバーが落ちている可能性があります。
-                </span>
-              </div>
-            </div>
-          )}
+          {vtubers.length == 0 && <FailedMessge />}
 
-          {/* 表達 */}
           <div
             id="feature"
-            className={`flex-col md:flex-row justify-center
-                max-w-[1000px] w-full mx-auto inline-block
-                top-0 p-1
-                `}
+            className={`flex-col md:flex-row justify-center max-w-[1000px] w-full mx-auto inline-block top-0 p-1`}
           >
-            <div className="mt-4 max-w-[1000px] ">
-              <div className="flex ">
+            <div className="mt-4 max-w-[1000px]">
+              <div className="flex">
                 <Image
                   src="/content/human_white.svg"
                   className="h-5 mr-1"
                   width={24}
                   height={20}
-                  alt=""
+                  alt="humans icon"
                 />
                 <h2 className="h-5 flex-1 mb-1">配信者</h2>
               </div>
@@ -205,7 +146,7 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
                     className="h-5 mr-1"
                     width={24}
                     height={20}
-                    alt=""
+                    alt="movie icon"
                   />
                   歌枠(動画)
                 </h2>
@@ -220,7 +161,7 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
                     className="h-5 mr-1"
                     width={24}
                     height={20}
-                    alt=""
+                    alt="note icon"
                   />
                   歌
                 </h2>
@@ -237,6 +178,42 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
   );
 };
 export default TopPage;
+
+const TitleGroup = () => {
+  return (
+    <div className="flex flex-col items-center">
+      <hgroup className="pb-1 md:pb-3 ">
+        <h1 className="flex justify-center text-xl sm:text-2xl md:text-3xl font-bold underline">
+          V-Karaoke (VTuber-Karaoke-Lists)
+        </h1>
+        <h2 className="flex justify-center text-sm  md:text-base">
+          「推し」の「歌枠」の聴きたい「歌」
+        </h2>
+        <h2 className="flex justify-center text-xs ms:text-sm md:text-base ">
+          「ささっと把握」、「さくっと再生」、「ばばっと布教」
+        </h2>
+      </hgroup>
+    </div>
+  );
+};
+
+const FailedMessge = () => {
+  return (
+    <div className="flex justify-center py-12">
+      <div className="flex flex-col  items-center bg-[#657261] font-bold text-xl p-6 max-w-[1200px]">
+        <span className="mb-3">データの取得に失敗しました。</span>
+        <span>ページ更新してもこの文章が表示された場合は</span>
+        <Link
+          href="https://twitter.com/shari_susi"
+          className="text-3xl text-[#b3d854] underline hover:opacity-70"
+        >
+          開発者のX
+        </Link>
+        <span>にDMいただけますと幸いです。</span>
+      </div>
+    </div>
+  );
+};
 
 /////////////////////////////////////////////////////////////////////////////
 export async function getServerSideProps(context: ContextType) {
