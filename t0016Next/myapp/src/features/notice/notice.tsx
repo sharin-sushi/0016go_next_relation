@@ -21,7 +21,6 @@ export const TopPageNotice = () => {
       <div className="ml-4">
         <li>{NoticeItems[0].content}</li>
         <li>{NoticeItems[1].content}</li>
-        <li>{NoticeItems[2].content}</li>
       </div>
 
       {isDisplay && (
@@ -79,10 +78,13 @@ type NoticeItem = {
 
 const NoticeItems: NoticeItem[] = [
   {
+    id: "notice-2024-11-05",
+    content: "お知らせ表示方法の変更 : 「？」をクリックで全件表示(11/05)",
+  },
+  {
     id: "notice-2024-10-22",
     content: "10/20～10/22におけるサイトが不安定な問題の解決 (10/23)",
   },
-
   {
     id: "notice-2024-10-18",
     content: (
