@@ -25,21 +25,23 @@ export const TopPageNotice = () => {
       </div>
 
       {isDisplay && (
-        <div className="absolute flex items-center justify-center z-10 top-0 left-0 h-full w-full">
+        <div className="fixed inset-0 flex items-center justify-center z-10">
           <div
             className="h-full w-full bg-black opacity-50"
             onClick={() => setIsDisplay(false)}
           />
 
           <div
-            className="absolute z-40 flex flex-col top-[150px] items-center md:max-w-3xl w-[90%] p-2 pt-5
+            className="absolute z-30 md:top-[150px] flex flex-col items-center md:max-w-3xl w-[90%] p-2 pt-5
             bg-[#B7A692] rounded-2xl shadow-lg shadow-black"
           >
             <div className="ml-4 text-black">
               <div className="font-bold">お知らせ全件</div>
-              {NoticeItems.map((item) => (
-                <li key={item.id}>{item.content}</li>
-              ))}
+              <div className="overflow-y-auto scroll  max-h-full h-96 p-1">
+                {NoticeItems.map((item) => (
+                  <li key={item.id}>{item.content}</li>
+                ))}
+              </div>
             </div>
             <div
               className={`${ToClickTW.regular} font-normal w-13`}
