@@ -22,7 +22,6 @@ export const TopPageNotice = () => {
         <li>{NoticeItems[0].content}</li>
         <li>{NoticeItems[1].content}</li>
         <li>{NoticeItems[2].content}</li>
-        {/* <li>本サイトは視聴機能付きの「ユーザー参加型データベース」です。ご登録をお願いします！</li> */}
       </div>
 
       {isDisplay && (
@@ -41,7 +40,6 @@ export const TopPageNotice = () => {
               {NoticeItems.map((item) => (
                 <li key={item.id}>{item.content}</li>
               ))}
-              {/* <li>本サイトは視聴機能付きの「ユーザー参加型データベース」です。ご登録をお願いします！</li> */}
             </div>
             <div
               className={`${ToClickTW.regular} font-normal w-13`}
