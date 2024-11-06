@@ -32,7 +32,10 @@ export const ToClickTW = {
   regular:
     "bg-[#776D5C] hover:bg-[#575044] hover:cursor-pointer text-white font-semibold rounded-md p-1",
   formButton:
-    "bg-[#B7A692] text-white font-semibold rounded-md p-1 text-center shadow-sm shadow-black shadow-black hover:shadow-inner hover:shadow-lg hover:shadow-[#FFF6E4]",
+    "bg-[#B7A692] text-white font-semibold rounded-md p-1 shadow-sm shadow-black hover:shadow-inner hover:shadow-[#FFF6E4]",
+  textSize: "bg-[#776D5C] text-white font-semibold rounded-md",
+  nomarlButton:
+    "bg-[#776D5C] text-white font-semibold rounded-md p-1 shadow-sm shadow-black hover:shadow-inner hover:shadow-[#FFF6E4]",
   textSize: "bg-[#776D5C] text-white font-semibold rounded-md",
   choice:
     "md:hover:bg-[#657261] border border-[#575044] text-white font-semibold " +
