@@ -1,4 +1,3 @@
-import { ToClickTW } from "@/styles/tailwiind";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -21,7 +20,6 @@ export const TopPageNotice = () => {
       <div className="ml-4">
         <li>{NoticeItems[0].content}</li>
         <li>{NoticeItems[1].content}</li>
-        <li>{NoticeItems[2].content}</li>
       </div>
 
       {isDisplay && (
@@ -32,19 +30,26 @@ export const TopPageNotice = () => {
           />
 
           <div
-            className="absolute z-30 md:top-[150px] flex flex-col items-center md:max-w-3xl w-[90%] p-2 pt-5
-            bg-[#B7A692] rounded-2xl shadow-lg shadow-black"
+            className="absolute z-30 md:top-[150px] items-center min-w-[300px] md:min-w-[600px] md:max-w-3xl w-[90%] py-2 px-4 flex flex-col gap-y-1
+          bg-[#B7A692] rounded-2xl shadow-lg shadow-black"
           >
-            <div className="ml-4 text-black">
-              <div className="font-bold">お知らせ全件</div>
-              <div className="overflow-y-auto scroll  max-h-full h-96 p-1">
-                {NoticeItems.map((item) => (
-                  <li key={item.id}>{item.content}</li>
-                ))}
-              </div>
+            <div className="w-32 self-start text-center rounded-t-md font-bold bg-[#776D5C]">
+              お知らせ全件
+            </div>
+
+            <div className="flex flex-col overflow-y-auto h-96 gap-y-1 text-black w-full">
+              {NoticeItems.map((item) => (
+                <div
+                  key={item.data}
+                  className="flex rounded-md px-1 bg-[#FFF6E4]"
+                >
+                  <div className="w-24 flex-shrink-0">{item.data} :</div>
+                  <div>{item.content}</div>
+                </div>
+              ))}
             </div>
             <div
-              className={`${ToClickTW.regular} font-normal w-13`}
+              className={`flex justify-center items-center w-[40%] h-10 rounded-md p-1 bg-[#776D5C] text-white font-semibold shadow-sm shadow-black hover:shadow-inner hover:shadow-[#FFF6E4]`}
               onClick={() => {
                 setIsDisplay(false);
               }}
@@ -73,40 +78,43 @@ const NoticeLink = ({
 };
 
 type NoticeItem = {
-  id: string;
+  data: string;
   content: React.ReactNode;
 };
 
 const NoticeItems: NoticeItem[] = [
   {
-    id: "notice-2024-10-22",
-    content: "10/20～10/22におけるサイトが不安定な問題の解決 (10/23)",
+    data: "2024-11-05",
+    content: "お知らせ表示方法の変更 : 「？」をクリックで全件表示",
   },
-
   {
-    id: "notice-2024-10-18",
+    data: "2024-10-22",
+    content: "10/20～10/22におけるサイトが不安定な問題の解決",
+  },
+  {
+    data: "2024-10-18",
     content: (
       <>
         <NoticeLink href="/user/signin">「ログイン」</NoticeLink>
-        ページのデザインとエラー表示の改善、ログインできない不具合の修正 (10/18)
+        ページのデザインとエラー表示の改善、ログインできない不具合の修正
       </>
     ),
   },
   {
-    id: "notice-2024-06-03",
+    data: "2024-06-03",
     content: (
       <>
         <NoticeLink href="/sings/karaoke">「カラオケ」</NoticeLink>
-        ページの検索機能を強化 (6/3)
+        ページの検索機能を強化
       </>
     ),
   },
   {
-    id: "notice-2024-05-30",
+    data: "2024-05-30",
     content: (
       <>
         <NoticeLink href="https://x.com/i_mo_5">「妹望おいも」</NoticeLink>
-        誕生日(5/30)
+        誕生日
       </>
     ),
   },
