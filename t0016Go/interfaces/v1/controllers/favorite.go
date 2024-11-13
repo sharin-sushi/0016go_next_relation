@@ -39,9 +39,7 @@ func (controller *Controller) SaveMovieFavorite(c *gin.Context) {
 
 	fav.ListenerId = applicantListenerId
 	foundFav := controller.FavoriteInteractor.FindFavoriteUnscopedByFavOrUnfavRegistry(fav)
-	fmt.Print("fav.ID:", fav.ID)
 	zeroValue := gorm.DeletedAt{}
-	fmt.Printf("foundFav:%v", foundFav)
 	if foundFav.ID == 0 {
 		err := controller.FavoriteInteractor.CreateMovieFavorite(foundFav)
 		if err != nil {
@@ -68,7 +66,6 @@ func (controller *Controller) SaveMovieFavorite(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Favorite it",
 	})
-	return
 }
 func (controller *Controller) DeleteMovieFavorite(c *gin.Context) {
 	applicantListenerId, err := common.TakeListenerIdFromJWT(c)
@@ -76,7 +73,6 @@ func (controller *Controller) DeleteMovieFavorite(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Error fetching listener info",
 		})
-		return
 	}
 	var fav domain.Favorite
 	if err := c.ShouldBind(&fav); err != nil {
@@ -95,7 +91,6 @@ func (controller *Controller) DeleteMovieFavorite(c *gin.Context) {
 		})
 		return
 	}
-	fmt.Printf("1-1, fav= %v \n", fav) //4
 	fav.ListenerId = applicantListenerId
 
 	if err := controller.FavoriteInteractor.DeleteMovieFavorite(fav); err != nil {
@@ -109,6 +104,7 @@ func (controller *Controller) DeleteMovieFavorite(c *gin.Context) {
 	})
 	return
 }
+
 func (controller *Controller) SaveKaraokeFavorite(c *gin.Context) {
 	applicantListenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
@@ -160,8 +156,8 @@ func (controller *Controller) SaveKaraokeFavorite(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Favorite it",
 	})
-	return
 }
+
 func (controller *Controller) DeleteKaraokeFavorite(c *gin.Context) {
 	applicantListenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
@@ -192,5 +188,4 @@ func (controller *Controller) DeleteKaraokeFavorite(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully UnFavorite it",
 	})
-	return
 }

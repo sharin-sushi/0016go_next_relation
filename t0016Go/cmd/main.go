@@ -14,7 +14,7 @@ func main() {
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
 		AllowOrigins: []string{
-			"http://localhost", "https://localhost",
+			"http://localhost:3005", "https://localhost:3005",
 			"http://v-karaoke.com", "https://v-karaoke.com",
 			"http://backend.v-karaoke.com", "https://backend.v-karaoke.com",
 		},
