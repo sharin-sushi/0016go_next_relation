@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import YouTube from 'react-youtube';
+import React, { useEffect, useState } from "react";
+import YouTube from "react-youtube";
 
-import { YouTubeTW } from '@/styles/tailwiind'
-import { getWindowSize } from '@/features/layout/Layout';
-import useWindowSize from '@/hooks/useSetWindowSize';
-import useHasWindow from '@/hooks/useHasWindow';
+import { YouTubeTW } from "@/styles/tailwiind";
+import { getWindowSize } from "@/features/layout/Layout";
+import useWindowSize from "@/hooks/useSetWindowSize";
+import useHasWindow from "@/hooks/useHasWindow";
 
-export const YouTubePlayer = ({ videoId, start }: { videoId: string, start: number }) => {
+export const YouTubePlayer = ({
+  videoId,
+  start,
+}: {
+  videoId: string;
+  start: number;
+}) => {
   const [hasWindow, setHasWindow] = useState(false);
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -19,44 +25,42 @@ export const YouTubePlayer = ({ videoId, start }: { videoId: string, start: numb
   // const hasWindow = useHasWindow()
   // const preWidth = windowSize.width
   // const preHeight = windowSize.height
-  const aspectRatio = 9 / 16
-  const isHorizontally = preWidth > preHeight
+  const aspectRatio = 9 / 16;
+  const isHorizontally = preWidth > preHeight;
 
   if (isHorizontally) {
     if (preWidth > 950) {
       const height = 255;
       const width = Math.round(height / aspectRatio);
       return (
-        <div className=''>
-          {hasWindow &&
+        <div className="">
+          {hasWindow && (
             <div>
-              < PreYouTubePlayer
+              <PreYouTubePlayer
                 videoId={videoId}
                 start={start}
-                windowSize={{ height, width }
-                }
+                windowSize={{ height, width }}
               />
             </div>
-          }
+          )}
         </div>
-      )
+      );
     } else {
       const width = Math.round(preWidth / 2);
       const height = Math.round((preWidth / 2) * aspectRatio);
       return (
         <div>
-          {hasWindow &&
+          {hasWindow && (
             <div>
-              < PreYouTubePlayer
+              <PreYouTubePlayer
                 videoId={videoId}
                 start={start}
-                windowSize={{ height, width }
-                }
+                windowSize={{ height, width }}
               />
             </div>
-          }
+          )}
         </div>
-      )
+      );
     }
   }
 
@@ -65,66 +69,63 @@ export const YouTubePlayer = ({ videoId, start }: { videoId: string, start: numb
       const height = 255;
       const width = Math.round(height / aspectRatio);
       return (
-        <div className=''>
-          {hasWindow &&
+        <div className="">
+          {hasWindow && (
             <div>
-              < PreYouTubePlayer
+              <PreYouTubePlayer
                 videoId={videoId}
                 start={start}
-                windowSize={{ height, width }
-                }
+                windowSize={{ height, width }}
               />
             </div>
-          }
+          )}
         </div>
-      )
+      );
     } else if (preWidth > 500) {
       const width = Math.round(0.48 * preWidth);
       const height = Math.round(0.48 * preWidth * aspectRatio);
       return (
         <div>
-          {hasWindow &&
+          {hasWindow && (
             <div>
-              < PreYouTubePlayer
+              <PreYouTubePlayer
                 videoId={videoId}
                 start={start}
-                windowSize={{ height, width }
-                }
+                windowSize={{ height, width }}
               />
             </div>
-          }
+          )}
         </div>
-      )
+      );
     } else {
       const width = Math.round(preHeight * 0.48);
-      const height = Math.round((preHeight * 0.48) * aspectRatio);
+      const height = Math.round(preHeight * 0.48 * aspectRatio);
       return (
         <div>
-          {hasWindow &&
+          {hasWindow && (
             <div>
-              < PreYouTubePlayer
+              <PreYouTubePlayer
                 videoId={videoId}
                 start={start}
-                windowSize={{ height, width }
-                }
+                windowSize={{ height, width }}
               />
             </div>
-          }
+          )}
         </div>
-      )
+      );
     }
   }
-}
+};
 
 ///////////// 本来あるべき姿(バグなのか動かない…nocookieでなら動く) ///////////////
-type Options = React.ComponentProps<typeof YouTube>['opts'];
+type Options = React.ComponentProps<typeof YouTube>["opts"];
 
 type YoutubePlayerProps = {
   videoId: string;
   start?: number;
   opts?: Options;
   onReady?: (event: { target: YT.Player }) => void;
-  windowSize: { width: number; height: number; }
+  windowSize: { width: number; height: number };
 };
 
 // const onPlayerReady = (event: { target: YT.Player }) => {
@@ -135,8 +136,12 @@ type YoutubePlayerProps = {
 
 // 単一再生
 export const PreYouTubePlayer: React.FC<YoutubePlayerProps> = ({
-  videoId, start, windowSize, opts = {
-    width: windowSize.width, height: windowSize.height,
+  videoId,
+  start,
+  windowSize,
+  opts = {
+    width: windowSize.width,
+    height: windowSize.height,
     // width: 640, height: 360,
     playerVars: {
       autoplay: 1,
@@ -147,19 +152,17 @@ export const PreYouTubePlayer: React.FC<YoutubePlayerProps> = ({
       // mute: 1,
       // loop: 1,
     },
-    host: 'https://www.youtube-nocookie.com'
+    host: "https://www.youtube-nocookie.com",
   },
-
 }) => {
   return (
     <YouTube
       videoId={videoId}
       opts={opts}
-    //  onReady={onReady}
+      //  onReady={onReady}
     />
   );
 };
-
 
 // ///////////////////////////////////
 // // // コードではどうにもならないバグが再発生したときにすぐ戻せるように保存
@@ -273,4 +276,3 @@ export const PreYouTubePlayer: React.FC<YoutubePlayerProps> = ({
 //     );
 //   }
 // }
-

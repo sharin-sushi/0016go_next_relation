@@ -8,12 +8,13 @@ import { Layout } from "@/components/layout/Layout";
 import { ToClickTW } from "@/styles/tailwiind";
 import type { ReceivedKaraoke, ReceivedMovie } from "@/types/vtuber_content";
 import { YouTubePlayer } from "@/components/moviePlayer/YoutubePlayer";
-import { ConvertStringToTime, ExtractVideoId } from "@/components/Conversion";
+import { ConvertStringToTime, ExtractVideoId } from "@/util";
 import { DropDownAllMovie } from "@/components/dropDown/Movie";
 import { NotFoundVtuber } from "@/components/layout/Main";
 import { GetServerSidePropsContext } from "next";
 import { generateRandomNumber } from "@/components/SomeFunction";
 import KaraokeFilterTableWithoutVTuberName from "@/components/table-tanstack/Karaoke/KaraokeFilterTableWithoutVTuberName";
+import { checkLoggedin } from "@/util/webStrage/cookie";
 
 const pageName = "Vtuber特設ページ"; // VTuberの名前になるようにレンダリングフェーズで変更している
 
@@ -171,26 +172,16 @@ const FilterKaraokesByUrl = (
   }
 };
 
-/////////////////////////////////////////////////////////////////////////////
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const kana = context.query.vtuber_kana;
 
-  const rawCookie = context.req.headers.cookie;
-  const sessionToken = rawCookie
-    ?.split(";")
-    .find((cookie: string) => cookie.trim().startsWith("auth-token="))
-    ?.split("=")[1];
-  let isSignin = false;
-  if (sessionToken) {
-    isSignin = true;
-  }
-
-  // アクセス数確認用
+  const { sessionToken, isLoggedin } = checkLoggedin(context);
   console.log(
-    `pageName: ${pageName}, "vtuber:${kana}, ログイン: ${
-      isSignin ? sessionToken : "false"
-    }`
-  );
+    "pageName, sessionToken, isLoggedin =",
+    pageName,
+    sessionToken,
+    isLoggedin
+  ); // 会員、非会員、どのページかの記録のため
 
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const options: AxiosRequestConfig = {
@@ -217,7 +208,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return {
     props: {
       posts: resData,
-      isSignin: isSignin,
+      isSignin: isLoggedin,
     },
   };
 }
