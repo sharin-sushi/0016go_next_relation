@@ -67,6 +67,7 @@ export function CreateForm({
     (karaoke) => karaoke.KaraokeId === selectedKaraoke
   );
 
+  // NOTE: このsetterが無いと連続で登録できない。そもそもUIから変更予定なので一緒に直す。
   const [vtuberNameInput, setVtuberNameInput] = useState(
     foundVtuber?.VtuberName
   );
