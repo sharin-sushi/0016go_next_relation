@@ -16,9 +16,12 @@ func NormalizeVtuber(v domain.Vtuber) domain.Vtuber {
 	return v
 }
 
-func ValidateVtuber(k domain.Vtuber) error {
-	err := validation.ValidateStruct(k)
-	return err
+func ValidateVtuber(v domain.Vtuber) error {
+	return validation.ValidateStruct(&v,
+		validation.Field(&v.VtuberName,
+			validation.Required.Error("vtuber name is required"),
+			validation.Length(2, 50).Error("vtuber name needs 2 ~ 50 chars"),
+		))
 }
 
 func NomalizeMovie(m domain.Movie) domain.Movie {
@@ -30,8 +33,7 @@ func NomalizeMovie(m domain.Movie) domain.Movie {
 }
 
 func ValidateMovie(k domain.Movie) error {
-	err := validation.ValidateStruct(k)
-	return err
+	return validation.ValidateStruct(&k)
 }
 
 func NormalizeKaraoke(k domain.Karaoke) domain.Karaoke {
@@ -44,21 +46,20 @@ func NormalizeKaraoke(k domain.Karaoke) domain.Karaoke {
 }
 
 func ValidateKaraoke(k domain.Karaoke) error {
-	err := validation.ValidateStruct(k,
-		validation.Field(k.KaraokeInputterId,
+	return validation.ValidateStruct(&k,
+		validation.Field(&k.KaraokeInputterId,
 			validation.Required.Error("karaoke inputter id is required"),
 		),
-		validation.Field(k.MovieUrl,
+		validation.Field(&k.MovieUrl,
 			validation.Required.Error("movie url is required"),
-			validation.Length(4, 20).Error("Password needs 4 ~ 20 chars"),
+			validation.Length(4, 40).Error("Password needs 4 ~ 40 chars"),
 		),
-		validation.Field(k.SingStart,
+		validation.Field(&k.SingStart,
 			validation.Required.Error("sing start is required"),
 			validation.Length(4, 20).Error("sing start needs 8"),
 		),
-		validation.Field(k.SongName,
+		validation.Field(&k.SongName,
 			validation.Required.Error("song name is required"),
 		),
 	)
-	return err
 }

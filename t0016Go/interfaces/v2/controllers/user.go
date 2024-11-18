@@ -79,7 +79,7 @@ func (controller *Controller) SingUp(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully created user, and logined",
 	})
-	return
+
 }
 
 func (controller *Controller) LogicalDeleteUser(c *gin.Context) {
@@ -168,7 +168,7 @@ func (controller *Controller) LogIn(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Logged In",
 	})
-	return
+
 }
 
 func Logout(c *gin.Context) {
@@ -234,5 +234,5 @@ func (controller *Controller) ListenerPage(c *gin.Context) {
 		"vtubers_movies_karaokes_u_created": TransmitKaraokes,
 		"error":                             errs,
 	})
-	return
+
 }

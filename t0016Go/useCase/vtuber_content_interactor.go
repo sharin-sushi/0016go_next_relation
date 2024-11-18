@@ -54,8 +54,11 @@ func (interactor *VtuberContentInteractor) CreateVtuber(v domain.Vtuber) error {
 	if err := common.ValidateVtuber(v); err != nil {
 		return err
 	}
-	err := interactor.VtuberContentRepository.CreateVtuber(v)
-	return err
+
+	if err := interactor.VtuberContentRepository.CreateVtuber(v); err != nil {
+		return err
+	}
+	return nil
 }
 func (interactor *VtuberContentInteractor) CreateMovie(m domain.Movie) error {
 	fmt.Print("useCase/vtuber_content_interactor.go \n")
@@ -64,8 +67,11 @@ func (interactor *VtuberContentInteractor) CreateMovie(m domain.Movie) error {
 	if err := common.ValidateMovie(m); err != nil {
 		return err
 	}
-	err := interactor.VtuberContentRepository.CreateMovie(m)
-	return err
+
+	if err := interactor.VtuberContentRepository.CreateMovie(m); err != nil {
+		return err
+	}
+	return nil
 }
 func (interactor *VtuberContentInteractor) CreateKaraoke(k domain.Karaoke) error {
 	fmt.Print("useCase/vtuber_content_interactor.go \n")
@@ -74,8 +80,10 @@ func (interactor *VtuberContentInteractor) CreateKaraoke(k domain.Karaoke) error
 	if err := common.ValidateKaraoke(k); err != nil {
 		return err
 	}
-	err := interactor.VtuberContentRepository.CreateKaraoke(k)
-	return err
+	if err := interactor.VtuberContentRepository.CreateKaraoke(k); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (interactor *VtuberContentInteractor) UpdateVtuber(v domain.Vtuber) error {
@@ -85,8 +93,10 @@ func (interactor *VtuberContentInteractor) UpdateVtuber(v domain.Vtuber) error {
 	if err := common.ValidateVtuber(v); err != nil {
 		return err
 	}
-	err := interactor.VtuberContentRepository.UpdateVtuber(v)
-	return err
+	if err := interactor.VtuberContentRepository.UpdateVtuber(v); err != nil {
+		return err
+	}
+	return nil
 }
 func (interactor *VtuberContentInteractor) UpdateMovie(m domain.Movie) error {
 	fmt.Print("useCase/vtuber_content_interactor.go \n")
@@ -95,8 +105,10 @@ func (interactor *VtuberContentInteractor) UpdateMovie(m domain.Movie) error {
 	if err := common.ValidateMovie(m); err != nil {
 		return err
 	}
-	err := interactor.VtuberContentRepository.UpdateMovie(m)
-	return err
+	if err := interactor.VtuberContentRepository.UpdateMovie(m); err != nil {
+		return err
+	}
+	return nil
 }
 func (interactor *VtuberContentInteractor) UpdateKaraoke(k domain.Karaoke) error {
 	fmt.Print("useCase/vtuber_content_interactor.go \n")
@@ -105,8 +117,10 @@ func (interactor *VtuberContentInteractor) UpdateKaraoke(k domain.Karaoke) error
 	if err := common.ValidateKaraoke(k); err != nil {
 		return err
 	}
-	err := interactor.VtuberContentRepository.UpdateKaraoke(k)
-	return err
+	if err := interactor.VtuberContentRepository.UpdateKaraoke(k); err != nil {
+		return err
+	}
+	return nil
 }
 func (interactor *VtuberContentInteractor) DeleteVtuber(v domain.Vtuber) error {
 	fmt.Print("useCase/vtuber_content_interactor.go \n")
