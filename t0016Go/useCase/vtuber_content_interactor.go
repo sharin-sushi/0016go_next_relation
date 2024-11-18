@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/sharin-sushi/0016go_next_relation/domain"
+	"github.com/sharin-sushi/0016go_next_relation/interfaces/v1/controllers/common"
 )
 
 type VtuberContentInteractor struct {
@@ -48,32 +49,62 @@ func (interactor *VtuberContentInteractor) GetVtubersMoviesKaraokes() ([]domain.
 
 func (interactor *VtuberContentInteractor) CreateVtuber(v domain.Vtuber) error {
 	fmt.Print("useCase/vtuber_content_interactor.go \n")
+	v = common.NormalizeVtuber(v)
+
+	if err := common.ValidateVtuber(v); err != nil {
+		return err
+	}
 	err := interactor.VtuberContentRepository.CreateVtuber(v)
 	return err
 }
 func (interactor *VtuberContentInteractor) CreateMovie(m domain.Movie) error {
 	fmt.Print("useCase/vtuber_content_interactor.go \n")
+	m = common.NomalizeMovie(m)
+
+	if err := common.ValidateMovie(m); err != nil {
+		return err
+	}
 	err := interactor.VtuberContentRepository.CreateMovie(m)
 	return err
 }
 func (interactor *VtuberContentInteractor) CreateKaraoke(k domain.Karaoke) error {
 	fmt.Print("useCase/vtuber_content_interactor.go \n")
+	k = common.NormalizeKaraoke(k)
+
+	if err := common.ValidateKaraoke(k); err != nil {
+		return err
+	}
 	err := interactor.VtuberContentRepository.CreateKaraoke(k)
 	return err
 }
 
 func (interactor *VtuberContentInteractor) UpdateVtuber(v domain.Vtuber) error {
 	fmt.Print("useCase/vtuber_content_interactor.go \n")
+	v = common.NormalizeVtuber(v)
+
+	if err := common.ValidateVtuber(v); err != nil {
+		return err
+	}
 	err := interactor.VtuberContentRepository.UpdateVtuber(v)
 	return err
 }
 func (interactor *VtuberContentInteractor) UpdateMovie(m domain.Movie) error {
 	fmt.Print("useCase/vtuber_content_interactor.go \n")
+	m = common.NomalizeMovie(m)
+
+	if err := common.ValidateMovie(m); err != nil {
+		return err
+	}
 	err := interactor.VtuberContentRepository.UpdateMovie(m)
 	return err
 }
 func (interactor *VtuberContentInteractor) UpdateKaraoke(k domain.Karaoke) error {
 	fmt.Print("useCase/vtuber_content_interactor.go \n")
+	k = common.NormalizeKaraoke(k)
+
+	if err := common.ValidateKaraoke(k); err != nil {
+		return err
+	}
 	err := interactor.VtuberContentRepository.UpdateKaraoke(k)
 	return err
 }
