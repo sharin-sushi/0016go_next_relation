@@ -10,8 +10,7 @@ func AddIsFavToMovieWithFav(mosWithFavCnts []domain.TransmitMovie, myFavs []doma
 	fmt.Print("AddIsFavToMovieWithFav\n")
 	var transmitData []domain.TransmitMovie
 	for _, moWithFavCnt := range mosWithFavCnts {
-		var isFav bool
-		isFav = returnIsFavEachMovieUrl(myFavs, moWithFavCnt.MovieUrl)
+		isFav := returnIsFavEachMovieUrl(myFavs, moWithFavCnt.MovieUrl)
 		movieWithLikeCnt := domain.TransmitMovie{
 			VtuberId: moWithFavCnt.VtuberId,
 			Vtuber:   moWithFavCnt.Vtuber,
