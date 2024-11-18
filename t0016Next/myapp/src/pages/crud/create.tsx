@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo } from "react";
-import Link from "next/link";
 import https from "https";
 import axios, { AxiosRequestConfig } from "axios";
 
@@ -15,6 +14,7 @@ import {
 } from "@/components/form/CreateContentForm";
 import { NotLoggedIn } from "@/components/layout/Main";
 import { checkLoggedin } from "@/util/webStrage/cookie";
+import { CreateContentFormDescription } from "@/features/description";
 
 const pageName = "コンテンツ登録";
 
@@ -79,39 +79,7 @@ export const CreatePage = ({ posts, isSignin }: CreatePageProps) => {
   return (
     <Layout pageName={pageName} isSignin={isSignin}>
       <div id="body" className="flex flex-col w-full">
-        <div id="explain" className="flex justify-center text-sm my-4 ">
-          <div className="">
-            <div className="my-3">
-              <h1 className="bg-gray-600 w-[180px]">〇会員について</h1>
-              <li>
-                現在、データの編集・削除の権限はそのデータ登録者本人とサイト管理者のみが所持しています。
-              </li>
-              <li>
-                ご自身の登録データは
-                <Link
-                  href="/user/mypage"
-                  className="underline underline-offset-1"
-                >
-                  マイページ
-                </Link>
-                で確認できます。
-              </li>
-            </div>
-
-            <div className="">
-              <h1 className="bg-gray-600 w-[180px]">
-                〇ゲストユーザーについて
-              </h1>
-              <li>
-                不要なデータでもお試し登録okです(後で削除していただけたら幸いです。)
-              </li>
-              <li>登録データは「最近登録された50曲」には表示されません。</li>
-              <li>
-                登録データは予告無く、削除または別ユーザーへ管理権限を譲渡することがあります。
-              </li>
-            </div>
-          </div>
-        </div>
+        <CreateContentFormDescription />
 
         <div
           id="feature"
@@ -125,9 +93,7 @@ export const CreatePage = ({ posts, isSignin }: CreatePageProps) => {
 
           <div
             id="form"
-            className={`
-                       inline-block flex-col top-0 max-w-[1000px] h-[600px]
-                    `}
+            className={`inline-block flex-col top-0 max-w-[1000px] h-[600px]`}
           >
             <div className="mt-1">
               <CreateForm
