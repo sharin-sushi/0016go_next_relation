@@ -7,14 +7,14 @@ export const ConvertStringToTime = (SingStart: string): number => {
   const hours = Number(match[0]);
   const minutes = Number(match[1]);
   const seconds = Number(match[2]);
-  let totalSeconds = (hours * 60 * 60) + (minutes * 60) + seconds;
+  let totalSeconds = hours * 60 * 60 + minutes * 60 + seconds;
   return totalSeconds;
-}
+};
 
 export const ExtractVideoId = (url: string): string => {
   const match = url.match(/v=([^&]+)/);
   if (match && match[1]) {
     return match[1];
   }
-  return '';
+  return "";
 };

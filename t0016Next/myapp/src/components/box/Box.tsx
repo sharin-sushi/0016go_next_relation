@@ -1,4 +1,4 @@
-import { FormTW } from '@/styles/tailwiind';
+import { FormTW } from "@/styles/tailwiind";
 // import React from 'react';
 
 // export const TopPageHowToUseBox = () => {
@@ -22,9 +22,5 @@ import { FormTW } from '@/styles/tailwiind';
 // }
 
 export const NeedBox = () => {
-    return (
-        <span className={`${FormTW.need} mx-1`}>
-            必須
-        </span>
-    )
-}
+  return <span className={`${FormTW.need} mx-1`}>必須</span>;
+};

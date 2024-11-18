@@ -11,7 +11,7 @@ import type {
   ReceivedKaraoke,
 } from "@/types/vtuber_content";
 import { YouTubePlayer } from "@/components/moviePlayer/YoutubePlayer";
-import { ConvertStringToTime, ExtractVideoId } from "@/components/Conversion";
+import { ConvertStringToTime, ExtractVideoId } from "@/util";
 import { Layout } from "@/components/layout/Layout";
 import { VtuberTable } from "@/components/table/Vtuber";
 import { MovieTable } from "@/components/table/Movie";
@@ -22,6 +22,7 @@ import {
 import { ToClickTW } from "@/styles/tailwiind";
 import { ContextType } from "@/types/server";
 import { TestLink } from "./multi";
+import { checkLoggedin } from "@/util/webStrage/cookie";
 
 const pageName = "test";
 const pageNum = 0;
@@ -217,23 +218,14 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
 };
 export default TopPage;
 
-/////////////////////////////////////////////////////////////////////////////
 export async function getServerSideProps(context: ContextType) {
-  const rawCookie = context.req.headers.cookie;
-  const sessionToken = rawCookie
-    ?.split(";")
-    .find((cookie: string) => cookie.trim().startsWith("auth-token="))
-    ?.split("=")[1];
-  let isSignin = false;
-  if (sessionToken) {
-    isSignin = true;
-  }
+  const { sessionToken, isLoggedin } = checkLoggedin(context);
   console.log(
-    "pageName, sessionToken, isSigni =",
+    "pageName, sessionToken, isLoggedin =",
     pageName,
     sessionToken,
-    isSignin
-  ); //アクセス数記録のため
+    isLoggedin
+  ); // 会員、非会員、どのページかの記録のため
 
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const options: AxiosRequestConfig = {
@@ -257,7 +249,7 @@ export async function getServerSideProps(context: ContextType) {
   return {
     props: {
       posts: resData,
-      isSignin: isSignin,
+      isSignin: isLoggedin,
     },
   };
 }

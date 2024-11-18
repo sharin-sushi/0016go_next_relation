@@ -10,7 +10,6 @@ import type {
   ReceivedKaraoke,
 } from "@/types/vtuber_content";
 import { YouTubePlayer } from "@/components/moviePlayer/YoutubePlayer";
-import { ExtractVideoId } from "@/components/Conversion";
 import { Layout } from "@/components/layout/Layout";
 import { VtuberTable } from "@/components/table/Vtuber";
 import { MovieTable } from "@/components/table/Movie";
@@ -22,6 +21,8 @@ import { ToClickTW } from "@/styles/tailwiind";
 import { ContextType } from "@/types/server";
 import Image from "next/image";
 import { TopPageNotice } from "@/features/notice/notice";
+import { checkLoggedin } from "@/util/webStrage/cookie";
+import { ExtractVideoId } from "@/util";
 
 const pageName = "Top";
 
@@ -215,23 +216,14 @@ const FailedMessge = () => {
   );
 };
 
-/////////////////////////////////////////////////////////////////////////////
 export async function getServerSideProps(context: ContextType) {
-  const rawCookie = context.req.headers.cookie;
-  const sessionToken = rawCookie
-    ?.split(";")
-    .find((cookie: string) => cookie.trim().startsWith("auth-token="))
-    ?.split("=")[1];
-  let isSignin = false;
-  if (sessionToken) {
-    isSignin = true;
-  }
+  const { sessionToken, isLoggedin } = checkLoggedin(context);
   console.log(
-    "pageName, sessionToken, isSigni =",
+    "pageName, sessionToken, isLoggedin =",
     pageName,
     sessionToken,
-    isSignin
-  ); //アクセス数記録のため
+    isLoggedin
+  ); // 会員、非会員、どのページかの記録のため
 
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const options: AxiosRequestConfig = {
@@ -242,6 +234,7 @@ export async function getServerSideProps(context: ContextType) {
     httpsAgent: process.env.NODE_ENV === "production" ? undefined : httpsAgent,
   };
 
+  // TODO: 型付け
   let resData = null;
   try {
     const res = await axios.get(`${domain.backendHost}/vcontents/`, options);
@@ -252,7 +245,7 @@ export async function getServerSideProps(context: ContextType) {
   return {
     props: {
       posts: resData,
-      isSignin: isSignin,
+      isSignin: isLoggedin,
     },
   };
 }
