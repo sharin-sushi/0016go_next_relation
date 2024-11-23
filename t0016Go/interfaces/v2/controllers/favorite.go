@@ -68,15 +68,14 @@ func (controller *Controller) SaveMovieFavorite(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Favorite it",
 	})
-	return
 }
+
 func (controller *Controller) DeleteMovieFavorite(c *gin.Context) {
 	applicantListenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Error fetching listener info",
 		})
-		return
 	}
 	var fav domain.Favorite
 	if err := c.ShouldBind(&fav); err != nil {
@@ -107,8 +106,8 @@ func (controller *Controller) DeleteMovieFavorite(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully UnFavorite it",
 	})
-	return
 }
+
 func (controller *Controller) SaveKaraokeFavorite(c *gin.Context) {
 	applicantListenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
@@ -160,8 +159,8 @@ func (controller *Controller) SaveKaraokeFavorite(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Favorite it",
 	})
-	return
 }
+
 func (controller *Controller) DeleteKaraokeFavorite(c *gin.Context) {
 	applicantListenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
@@ -192,5 +191,4 @@ func (controller *Controller) DeleteKaraokeFavorite(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully UnFavorite it",
 	})
-	return
 }

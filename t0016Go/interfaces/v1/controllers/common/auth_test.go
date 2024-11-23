@@ -1,17 +1,10 @@
 package common
 
 import (
-	"database/sql"
 	"testing"
-	"time"
 
 	"github.com/sharin-sushi/0016go_next_relation/domain"
-	"gorm.io/gorm"
 )
-
-var tim time.Time
-var nTi sql.NullTime
-var gDe gorm.DeletedAt
 
 func TestValidateSignup(t *testing.T) {
 	type args struct {

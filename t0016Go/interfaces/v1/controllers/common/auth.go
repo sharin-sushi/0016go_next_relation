@@ -116,7 +116,6 @@ func ParseToken(tokenString string) (*jwt.Token, error) {
 }
 
 func ValidateSignup(m *domain.Listener) error {
-	fmt.Println()
 	err := validation.ValidateStruct(m,
 		validation.Field(&m.ListenerName,
 			validation.Required.Error("Name is required"),
@@ -124,7 +123,8 @@ func ValidateSignup(m *domain.Listener) error {
 		),
 		validation.Field(&m.Email,
 			validation.Required.Error("Email is required"),
-			validation.Length(10, 100).Error("Email needs 10 ~ 100 chars"), //メアドは現状、これ以外の制限はしてない
+			// TODO: ちゃんとしたメアドのバリデーションを実装する
+			validation.Length(10, 100).Error("Email needs 10 ~ 100 chars"),
 		),
 		validation.Field(&m.Password,
 			validation.Required.Error("Password is required"),

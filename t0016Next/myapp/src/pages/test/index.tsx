@@ -24,6 +24,8 @@ import { ContextType } from "@/types/server";
 import { TestLink } from "./multi";
 import { checkLoggedin } from "@/util/webStrage/cookie";
 
+const lastUpdatedAtString = "2024.11.23";
+
 const pageName = "test";
 const pageNum = 0;
 
@@ -54,7 +56,13 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
   return (
     <Layout pageName={pageName} isSignin={isSignin}>
       <TestLink thisPageNum={pageNum} />
-      <div>2024.10.28</div>
+      <div className="flex flex-row w-72 my-1 px-4 justify-between rounded bg-[#f9f3e9] text-black font-bold">
+        <div>最終更新日：</div>
+        <div className="flex flex-col">
+          <span>frontend:{lastUpdatedAtString}</span>
+          <span>backend:{lastUpdatedAtString}</span>
+        </div>
+      </div>
       <span>multistage, port 80</span>
       <div className="flex justify-center md:flex-row flex-col m-6">
         <div className="w-full h-max p-8 bg-black">
@@ -62,25 +70,23 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
           <hr />
           process.env.NODE_ENV={process.env.NODE_ENV}
           <br />
-          <br />
           ※取得できないとき、`process.env.NODE_ENV=`と空となる
           <br />
-          <br />
-          ローカルで、
-          <br />
-          npm run devでは development <br />
-          npm run build/startでは production <br />
-          となった。
+          <div className="flex flex-row my-1 px-2  rounded bg-[#f9f3e9] text-black font-bold">
+            <div>ローカルで↓となった。</div>
+            <div>
+              npm run dev の時、development <br />
+              npm run build/start の時、production <br />
+            </div>
+          </div>
         </div>
         <div className="w-full h-max p-8 bg-black">
           〇環境変数取得テスト２ <br />
           <hr />
           process.env.EXSAMPLE_TEST={process.env.EXSAMPLE_TEST}
           <br />
-          <br />
           ※取得できないとき、`process.env.EXSAMPLE_TEST=`と空となる
           ※3/25時点ではEXSAMPLE_TESTを設定してない
-          <br />
           <br />
         </div>
       </div>

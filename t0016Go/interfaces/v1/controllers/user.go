@@ -12,9 +12,10 @@ import (
 var guestId = common.GetGuestListenerId()
 
 func (controller *Controller) CreateUser(c *gin.Context) {
-	fmt.Printf("start `CreateUser` at interfaces/controllers/users.go \n")
+	fmt.Printf("start `CreateUser` at interfaces/v1/controllers/users.go \n")
 	var user domain.Listener
 	if err := c.ShouldBind(&user); err != nil {
+		fmt.Println("err.Error:", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invailed request body",
 			"error":   err.Error(),
@@ -22,6 +23,7 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 		return
 	}
 	if err := common.ValidateSignup(&user); err != nil {
+		fmt.Println("err.Error:", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invailed validation",
 			"error":   err.Error(),
@@ -60,6 +62,7 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 	user.Email = emailAES
 	newUser, err := controller.UserInteractor.CreateUser(user)
 	if err != nil {
+		fmt.Println("err.Error:", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed Singed Up",
 			"error":   err.Error(),
@@ -68,6 +71,7 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 	}
 
 	if err := common.SetListenerIdintoCookie(c, newUser.ListenerId); err != nil {
+		fmt.Println("err.Error:", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "the E-mail address already in use",
 			"error":   err.Error(),
@@ -81,12 +85,13 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 }
 
 func (controller *Controller) LogicalDeleteUser(c *gin.Context) {
-	fmt.Printf("start `LogicalDeleteUser` at interfaces/controllers/users.go \n")
+	fmt.Printf("start `LogicalDeleteUser` at interfaces/v1/controllers/users.go \n")
 
 	tokenLId, err := common.TakeListenerIdFromJWT(c)
 	fmt.Printf("tokenLId = %v \n", tokenLId)
 
 	if err != nil {
+		fmt.Printf("err:LogicalDeleteUser TakeListenerIdFromJWT, %v\n", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid ListenerId of token",
 			"err":     err,
@@ -107,6 +112,7 @@ func (controller *Controller) LogicalDeleteUser(c *gin.Context) {
 		})
 		return
 	}
+
 	c.SetCookie("auth-token", "none", -1, "/", "localhost", false, true)
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Withdrawn. You can restore ur acc. within 60 days.",
@@ -114,23 +120,23 @@ func (controller *Controller) LogicalDeleteUser(c *gin.Context) {
 }
 
 func (controller *Controller) LogIn(c *gin.Context) {
-	fmt.Printf("start `LogIn` at interfaces/controllers/users.go \n")
+	fmt.Printf("start `LogIn` at interfaces/v1/controllers/users.go \n")
 
 	var user domain.Listener
 	if err := c.ShouldBind(&user); err != nil {
+		fmt.Printf("err: LogIn ShouldBind, %v\n", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid request body",
 			"error":   err.Error(),
 		})
 		return
 	}
-	fmt.Printf("user:%v\n", user)
 
 	emailAES, err := common.EncryptByAES(user.Email)
 	if err != nil {
-		fmt.Printf("err:%v\n", err)
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed encrypt email by AES",
+		fmt.Printf("err:, LogIn EncryptByAES%v\n", err.Error())
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "failed encrypt email",
 			"error":   err.Error(),
 		})
 		return
@@ -138,8 +144,9 @@ func (controller *Controller) LogIn(c *gin.Context) {
 	fmt.Printf("emailAES:%v\n", emailAES)
 
 	foundListener, err := controller.UserInteractor.FindUserByEmail(emailAES)
-	fmt.Printf("foundListener=%v\n", foundListener)
+	fmt.Printf("Listener Logged in:%v\n", foundListener)
 	if err != nil {
+		fmt.Printf("err:LogIn FindUserByEmail, %v\n", err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Error fetching listener info",
 			"error":   err.Error(),
@@ -148,6 +155,7 @@ func (controller *Controller) LogIn(c *gin.Context) {
 	}
 
 	if err := common.CompareHashAndPassword(foundListener.Password, string(user.Password)); err != nil {
+		fmt.Println("err.Error:", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed Login: Please confirm the Email&Password you entered",
 			"error":   err.Error(),
@@ -156,6 +164,7 @@ func (controller *Controller) LogIn(c *gin.Context) {
 	}
 
 	if err := common.SetListenerIdintoCookie(c, foundListener.ListenerId); err != nil {
+		fmt.Printf("err:, LogIn SetListenerIdintoCookie%v\n", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed Login: failed set cookie. bad system.",
 			"error":   err.Error(),
@@ -213,6 +222,7 @@ func (controller *Controller) ListenerPage(c *gin.Context) {
 	// listenerId取得
 	listenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
+		fmt.Println("err.Error:", err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Need Login"})
 		return
 	}
@@ -222,7 +232,7 @@ func (controller *Controller) ListenerPage(c *gin.Context) {
 	if err != nil {
 		errs = append(errs, err)
 	}
-	fmt.Printf("myFav= \n %v\n", myFav)
+
 	TransmitMovies := common.AddIsFavToMovieWithFav(createdVtsMos, myFav)
 	TransmitKaraokes := common.AddIsFavToKaraokeWithFav(createdVtsMosKas, myFav)
 	c.JSON(http.StatusOK, gin.H{
