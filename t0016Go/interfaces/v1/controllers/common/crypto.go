@@ -13,36 +13,42 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var bcryotCost int
+var bcryptCost int
 var aesKey []byte
 var aesIv []byte
 var costString string
 
-func initAesEnv() {
-	fmt.Println("start to initAesEnv")
-	costString = os.Getenv("BCRYPT_COST")
-	aesKey = []byte(os.Getenv("AES_KEY"))
-	aesIv, _ = hex.DecodeString(os.Getenv("AES_IV"))
-}
-
-func init() {
+func InitCryptVar() {
 	var err error
 	fmt.Println("start to godotenv.Load")
 	if err = godotenv.Load(".env", "../.env"); err != nil {
-		fmt.Println("failed to godotenv at init() in cryptgo (on Cloud)")
+		fmt.Println("failed to godotenv at init() in cryptgo (on Cloud)", err.Error())
 	}
 	initAesEnv()
 
-	bcryotCost, err = strconv.Atoi(costString)
-	if err != nil {
-		fmt.Printf("failed to convert to bcryptCost. err:%v\n", err)
+	if aesKey == nil {
+		fmt.Println("aesKey is nil or empty")
 	}
+
+	bcryptCost, err = strconv.Atoi(costString)
+	if err != nil {
+		fmt.Printf("failed to convert to bcryptCost. err:%v\n", err.Error())
+	}
+}
+
+func initAesEnv() {
+	fmt.Println("start to initAesEnv")
+	costString = os.Getenv("BCRYPT_COST")
+	envAesKey := os.Getenv("AES_KEY")
+	fmt.Println("envAesKey", envAesKey)
+	aesKey = []byte(envAesKey)
+	aesIv, _ = hex.DecodeString(os.Getenv("AES_IV"))
 }
 
 // password
 
 func EncryptPassword(password string) (string, error) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcryotCost)
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcryptCost)
 	return string(hash), err
 }
 

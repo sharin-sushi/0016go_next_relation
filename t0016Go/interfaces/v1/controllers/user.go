@@ -12,7 +12,7 @@ import (
 var guestId = common.GetGuestListenerId()
 
 func (controller *Controller) CreateUser(c *gin.Context) {
-	fmt.Printf("start `CreateUser` at interfaces/controllers/users.go \n")
+	fmt.Printf("start `CreateUser` at interfaces/v1/controllers/users.go \n")
 	var user domain.Listener
 	if err := c.ShouldBind(&user); err != nil {
 		fmt.Println("err.Error:", err.Error())
@@ -85,7 +85,7 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 }
 
 func (controller *Controller) LogicalDeleteUser(c *gin.Context) {
-	fmt.Printf("start `LogicalDeleteUser` at interfaces/controllers/users.go \n")
+	fmt.Printf("start `LogicalDeleteUser` at interfaces/v1/controllers/users.go \n")
 
 	tokenLId, err := common.TakeListenerIdFromJWT(c)
 	fmt.Printf("tokenLId = %v \n", tokenLId)
@@ -120,7 +120,7 @@ func (controller *Controller) LogicalDeleteUser(c *gin.Context) {
 }
 
 func (controller *Controller) LogIn(c *gin.Context) {
-	fmt.Printf("start `LogIn` at interfaces/controllers/users.go \n")
+	fmt.Printf("start `LogIn` at interfaces/v1/controllers/users.go \n")
 
 	var user domain.Listener
 	if err := c.ShouldBind(&user); err != nil {
@@ -131,7 +131,6 @@ func (controller *Controller) LogIn(c *gin.Context) {
 		})
 		return
 	}
-	fmt.Printf("user:%v\n", user)
 
 	emailAES, err := common.EncryptByAES(user.Email)
 	if err != nil {
@@ -233,7 +232,7 @@ func (controller *Controller) ListenerPage(c *gin.Context) {
 	if err != nil {
 		errs = append(errs, err)
 	}
-	fmt.Printf("myFav= \n %v\n", myFav)
+
 	TransmitMovies := common.AddIsFavToMovieWithFav(createdVtsMos, myFav)
 	TransmitKaraokes := common.AddIsFavToKaraokeWithFav(createdVtsMosKas, myFav)
 	c.JSON(http.StatusOK, gin.H{

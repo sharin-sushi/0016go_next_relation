@@ -14,16 +14,14 @@ import (
 	"github.com/sharin-sushi/0016go_next_relation/interfaces/v1/controllers/common"
 )
 
+var isDidDBMigration bool
+
 type SqlHandler struct {
 	Conn *gorm.DB
 }
 
-func init() {
-	getEnvVar()
-}
-
 // 似たような処理がSetListenerIdintoCookie()にもあるので、envを変更するときは注意
-func getEnvVar() {
+func GetEnvVar() {
 	if common.IsOnCloud {
 		//クラウド環境
 		fmt.Println("クラウド環境で起動")
@@ -114,15 +112,19 @@ func dbInit() database.SqlHandler {
 }
 
 func (Db *SqlHandler) migration() {
-	fmt.Print("migratoin開始")
-	Db.Conn.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(
-		// User
-		domain.Listener{},
-		// Like Relatoin
-		domain.Favorite{}, domain.Follow{},
-		// Vtuber Contents
-		domain.Karaoke{}, domain.Movie{}, domain.Vtuber{}, domain.OriginalSong{},
-	)
+	// NOTE: v1, v2でなぜか２回migrationが走るので、それを防ぐためのフラグ
+	if !isDidDBMigration {
+		fmt.Print("migratoin開始")
+		Db.Conn.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(
+			// User
+			domain.Listener{},
+			// Like Relatoin
+			domain.Favorite{}, domain.Follow{},
+			// Vtuber Contents
+			domain.Karaoke{}, domain.Movie{}, domain.Vtuber{}, domain.OriginalSong{},
+		)
+		isDidDBMigration = true
+	}
 }
 
 func (handler *SqlHandler) Count(column *int64) *gorm.DB {
