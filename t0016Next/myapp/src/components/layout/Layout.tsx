@@ -163,7 +163,7 @@ const Header = ({ pageName }: HeaderProps) => {
                   </Link>
                 </span>
                 {pathName === "/user/mypage" && (
-                  <div>
+                  <>
                     <span className="pr-1">:</span>
                     <Link
                       href="/user/profile"
@@ -171,7 +171,7 @@ const Header = ({ pageName }: HeaderProps) => {
                     >
                       プロフィール
                     </Link>
-                  </div>
+                  </>
                 )}
               </div>
             )}
