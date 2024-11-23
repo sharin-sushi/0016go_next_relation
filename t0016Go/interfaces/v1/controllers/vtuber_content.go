@@ -605,7 +605,7 @@ func (controller *Controller) ReturnTestpage(c *gin.Context) {
 		{
 			VtuberId: 1,
 			Vtuber: domain.Vtuber{
-				VtuberName:       UpdateData,
+				VtuberName:       LastUpdateData,
 				VtuberKana:       "",
 				IntroMovieUrl:    "",
 				VtuberInputterId: 1,
