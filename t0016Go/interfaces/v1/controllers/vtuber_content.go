@@ -24,35 +24,37 @@ func (controller *Controller) GetJoinVtubersMoviesKaraokes(c *gin.Context) {
 		return
 	}
 	myFav, err := controller.FavoriteInteractor.FindFavoritesCreatedByListenerId(listenerId)
+	if err != nil {
+		fmt.Print("err in FindFavoritesCreatedByListenerId	:", err)
+	}
 	transmitKaraokes := common.AddIsFavToKaraokeWithFav(VtsMosKasWithFav, myFav)
 
 	c.JSON(http.StatusOK, gin.H{
 		"vtubers_movies_karaokes": transmitKaraokes,
 	})
-	return
 }
 
-func (controller *Controller) ReturnVtuberPageData(c *gin.Context) {
-	kana := c.Param("kana")
+func (c *Controller) ReturnVtuberPageData(cont *gin.Context) {
+	kana := cont.Param("kana")
 	fmt.Println("kana", kana)
 	var errs []error
 
-	VtsMosKasWithFavofVtu, err := controller.FavoriteInteractor.GetVtubersMoviesKaraokesByVtuerKanaWithFavCnts(kana)
+	VtsMosKasWithFavofVtu, err := c.FavoriteInteractor.GetVtubersMoviesKaraokesByVtuerKanaWithFavCnts(kana)
 	if err != nil {
 		fmt.Print("err:", err)
 		errs = append(errs, err)
 	}
 	vtuberId := VtsMosKasWithFavofVtu[0].VtuberId
-	MosOfVtu, err := controller.VtuberContentInteractor.GetMoviesUrlTitlebyVtuber(vtuberId)
+	MosOfVtu, err := c.VtuberContentInteractor.GetMoviesUrlTitlebyVtuber(vtuberId)
 	if err != nil {
 		fmt.Print("err:", err)
 		errs = append(errs, err)
 	}
 
-	listenerId, err := common.TakeListenerIdFromJWT(c) //非ログイン時でもデータは送付する
+	listenerId, err := common.TakeListenerIdFromJWT(cont) //非ログイン時でもデータは送付する
 	if err != nil || listenerId == 0 {
 		errs = append(errs, err)
-		c.JSON(http.StatusOK, gin.H{
+		cont.JSON(http.StatusOK, gin.H{
 			"vtubers_movies":          MosOfVtu,
 			"vtubers_movies_karaokes": VtsMosKasWithFavofVtu,
 			"error":                   errs,
@@ -60,20 +62,24 @@ func (controller *Controller) ReturnVtuberPageData(c *gin.Context) {
 		})
 		return
 	}
-	myFav, err := controller.FavoriteInteractor.FindFavoritesCreatedByListenerId(listenerId)
+	myFav, err := c.FavoriteInteractor.FindFavoritesCreatedByListenerId(listenerId)
+	if err != nil {
+		fmt.Print("err in FindFavoritesCreatedByListenerId	:", err)
+	}
+
 	TransmitKaraokes := common.AddIsFavToKaraokeWithFav(VtsMosKasWithFavofVtu, myFav)
 
-	c.JSON(http.StatusOK, gin.H{
+	cont.JSON(http.StatusOK, gin.H{
 		"vtubers_movies":          MosOfVtu,
 		"vtubers_movies_karaokes": TransmitKaraokes,
 		"error":                   errs,
 	})
-	return
 }
 
 func (controller *Controller) CreateVtuber(c *gin.Context) {
 	listenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Error fetching listener info",
 		})
@@ -81,6 +87,7 @@ func (controller *Controller) CreateVtuber(c *gin.Context) {
 	}
 	var vtuber domain.Vtuber
 	if err := c.ShouldBind(&vtuber); err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid request body",
 		})
@@ -89,20 +96,22 @@ func (controller *Controller) CreateVtuber(c *gin.Context) {
 	vtuber.VtuberInputterId = listenerId
 
 	if err := controller.VtuberContentInteractor.CreateVtuber(vtuber); err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invailed Registered the New Vtuber",
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Registered the New Vtuber",
 	})
-	return
 }
 
 func (controller *Controller) CreateMovie(c *gin.Context) {
 	listenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
+		fmt.Println("err: jwt,", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Error fetching listener info",
 		})
@@ -110,6 +119,7 @@ func (controller *Controller) CreateMovie(c *gin.Context) {
 	}
 	var movie domain.Movie
 	if err := c.ShouldBind(&movie); err != nil {
+		fmt.Println("err: ShouldBind,", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid request body",
 		})
@@ -118,19 +128,22 @@ func (controller *Controller) CreateMovie(c *gin.Context) {
 
 	movie.MovieInputterId = listenerId
 	if err := controller.VtuberContentInteractor.CreateMovie(movie); err != nil {
+		fmt.Println("err: create movie,", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invailed Registered the New Movie",
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Registered the New Movie",
 	})
-	return
 }
+
 func (controller *Controller) CreateKaraoke(c *gin.Context) {
 	listenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
+		fmt.Println("err: jwt,", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Error fetching listener info",
 		})
@@ -138,6 +151,7 @@ func (controller *Controller) CreateKaraoke(c *gin.Context) {
 	}
 	var karaoke domain.Karaoke
 	if err := c.ShouldBind(&karaoke); err != nil {
+		fmt.Println("err: ShoulBind karaoke,", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid request body",
 		})
@@ -145,6 +159,7 @@ func (controller *Controller) CreateKaraoke(c *gin.Context) {
 	}
 	karaoke.KaraokeInputterId = listenerId
 	if err := controller.VtuberContentInteractor.CreateKaraoke(karaoke); err != nil {
+		fmt.Println("err: create karaoke,", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invailed Registered the New Karaoke",
 		})
@@ -153,12 +168,13 @@ func (controller *Controller) CreateKaraoke(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Registered the New Karaoke",
 	})
-	return
+
 }
 
 func (controller *Controller) EditVtuber(c *gin.Context) {
 	listenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Error fetching listener info",
 		})
@@ -173,11 +189,12 @@ func (controller *Controller) EditVtuber(c *gin.Context) {
 	}
 	vtuber.VtuberInputterId = listenerId
 	if isAuth, err := controller.VtuberContentInteractor.VerifyUserModifyVtuber(listenerId, vtuber); err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Auth Check is failed.(we could not Verify)",
 		})
 		return
-	} else if isAuth == false {
+	} else if !isAuth {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Only The Inputter can modify each data",
 		})
@@ -192,12 +209,12 @@ func (controller *Controller) EditVtuber(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Update",
 	})
-	return
 }
 
 func (controller *Controller) EditMovie(c *gin.Context) {
 	listenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Error fetching listener info",
 		})
@@ -217,27 +234,29 @@ func (controller *Controller) EditMovie(c *gin.Context) {
 			"message": "Auth Check is failed.(we could not Verify)",
 		})
 		return
-	} else if isAuth == false {
+	} else if !isAuth {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Only The Inputter can modify each data",
 		})
 		return
 	}
 	if err := controller.VtuberContentInteractor.UpdateMovie(Movie); err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Inputter can modify each data",
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Update",
 	})
-	return
 }
 
 func (controller *Controller) EditKaraoke(c *gin.Context) {
 	listenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Error fetching listener info",
 		})
@@ -256,7 +275,7 @@ func (controller *Controller) EditKaraoke(c *gin.Context) {
 			"message": "Auth Check is failed.(we could not Verify)",
 		})
 		return
-	} else if isAuth != true {
+	} else if !isAuth {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Only The Inputter can modify each data",
 		})
@@ -273,7 +292,7 @@ func (controller *Controller) EditKaraoke(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Update",
 	})
-	return
+
 }
 
 func (controller *Controller) DeleteOfPage(c *gin.Context) {
@@ -291,12 +310,14 @@ func (controller *Controller) DeleteOfPage(c *gin.Context) {
 
 	listenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Need Login"})
 		return
 	}
 	createdVts, createdVtsMos, createdVtsMosKas, errs := controller.FavoriteInteractor.FindEachRecordsCreatedByListenerId(listenerId)
 	myFav, err := controller.FavoriteInteractor.FindFavoritesCreatedByListenerId(listenerId)
 	if err != nil {
+		fmt.Println("err:", err)
 		errs = append(errs, err)
 	}
 
@@ -310,7 +331,7 @@ func (controller *Controller) DeleteOfPage(c *gin.Context) {
 		"all_vtubers_movies":                VtsMosWithFav,
 		"error":                             errs,
 	})
-	return
+
 }
 
 func (controller *Controller) DeleteVtuber(c *gin.Context) {
@@ -334,28 +355,31 @@ func (controller *Controller) DeleteVtuber(c *gin.Context) {
 			"message": "Auth Check is failed.(we could not Verify)",
 		})
 		return
-	} else if isAuth == false {
+	} else if !isAuth {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Only The Inputter can modify each data",
 		})
 		return
 	}
+
 	if err := controller.VtuberContentInteractor.DeleteVtuber(selectedVtuber); err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Only Inputter can modify each data",
 			"error":   err,
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Delete",
 	})
-	return
 }
 
 func (controller *Controller) DeleteMovie(c *gin.Context) {
 	listenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Error fetching listener info",
 		})
@@ -363,6 +387,7 @@ func (controller *Controller) DeleteMovie(c *gin.Context) {
 	}
 	var Movie domain.Movie
 	if err := c.ShouldBind(&Movie); err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid request body",
 		})
@@ -373,34 +398,39 @@ func (controller *Controller) DeleteMovie(c *gin.Context) {
 			"message": "Auth Check is failed.(we could not Verify)",
 		})
 		return
-	} else if isAuth == false {
+	} else if !isAuth {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Only The Inputter can modify each data",
 		})
 		return
 	}
+
 	if err := controller.VtuberContentInteractor.DeleteMovie(Movie); err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Only Inputter can modify each data",
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Delete",
 	})
-	return
 }
 
 func (controller *Controller) DeleteKaraoke(c *gin.Context) {
 	listenerId, err := common.TakeListenerIdFromJWT(c)
 	if err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Error fetching listener info",
 		})
 		return
 	}
+
 	var Karaoke domain.Karaoke
 	if err := c.ShouldBind(&Karaoke); err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid request body",
 		})
@@ -412,22 +442,24 @@ func (controller *Controller) DeleteKaraoke(c *gin.Context) {
 			"message": "Auth Check is failed.(we could not Verify)",
 		})
 		return
-	} else if isAuth == false {
+	} else if !isAuth {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Only The Inputter can modify each data",
 		})
 		return
 	}
+
 	if err := controller.VtuberContentInteractor.DeleteKaraoke(Karaoke); err != nil {
+		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Only Inputter can modify each data",
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Delete",
 	})
-	return
 }
 
 func (controller *Controller) ReturnTopPageData(c *gin.Context) {
@@ -451,9 +483,11 @@ func (controller *Controller) ReturnTopPageData(c *gin.Context) {
 	if err != nil {
 		errs = append(errs, err)
 	}
+
 	listenerId, err := common.TakeListenerIdFromJWT(c) //非ログイン時でもデータは送付する
 	fmt.Printf("listenerId=%v\n", listenerId)
 	if err != nil || listenerId == 0 {
+		fmt.Println("err:", err)
 		errs = append(errs, err)
 		c.JSON(http.StatusOK, gin.H{
 			"vtubers":                 allVts,
@@ -466,6 +500,9 @@ func (controller *Controller) ReturnTopPageData(c *gin.Context) {
 		return
 	}
 	myFav, err := controller.FavoriteInteractor.FindFavoritesCreatedByListenerId(listenerId)
+	if err != nil {
+		fmt.Println("err:", err)
+	}
 
 	TransmitMovies := common.AddIsFavToMovieWithFav(VtsMosWithFav, myFav)
 	TransmitKaraokes := common.AddIsFavToKaraokeWithFav(VtsMosKasWithFav, myFav)
@@ -478,7 +515,6 @@ func (controller *Controller) ReturnTopPageData(c *gin.Context) {
 		"latest_karaokes":         TransmitLatestKaraoes,
 		"error":                   errs,
 	})
-	return
 }
 
 func (controller *Controller) ReturnOriginalSongPage(c *gin.Context) {
@@ -497,8 +533,6 @@ func (controller *Controller) ReturnOriginalSongPage(c *gin.Context) {
 		"error":                   errs,
 		"message":                 "dont you Loged in ?",
 	})
-	return
-
 }
 
 // dropdown用
@@ -515,6 +549,9 @@ func (controller *Controller) GetVtuverMovieKaraoke(c *gin.Context) {
 	allKas, err := controller.VtuberContentInteractor.GetKaraokes()
 	if err != nil {
 		errs = append(errs, err)
+	}
+	if err != nil {
+		fmt.Println("err:", err)
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"vtubers":                 allVts,
@@ -597,6 +634,4 @@ func (controller *Controller) ReturnTestpage(c *gin.Context) {
 		"error":                   errs,
 		"message":                 "did u make it?",
 	})
-	return
-
 }

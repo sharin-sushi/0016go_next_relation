@@ -159,12 +159,12 @@ func (controller *Controller) CreateKaraoke(c *gin.Context) {
 	}
 	karaoke.KaraokeInputterId = listenerId
 	if err := controller.VtuberContentInteractor.CreateKaraoke(karaoke); err != nil {
-		fmt.Println("err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invailed Registered the New Karaoke",
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully Registered the New Karaoke",
 	})
