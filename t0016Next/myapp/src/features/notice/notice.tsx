@@ -84,6 +84,16 @@ type NoticeItem = {
 
 const NoticeItems: NoticeItem[] = [
   {
+    data: "2024-11-23",
+    content: (
+      <>
+        <NoticeLink href="/crud/create">「登録」 </NoticeLink>
+        <NoticeLink href="/crud/edit">「編集」 </NoticeLink>
+        で１文字の曲名に対応
+      </>
+    ),
+  },
+  {
     data: "2024-11-05",
     content: "お知らせ表示方法の変更 : 「？」をクリックで全件表示",
   },
