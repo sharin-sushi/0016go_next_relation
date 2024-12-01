@@ -129,7 +129,7 @@ export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
                 </div>
                 <span>動画絞込み（入力できます）</span>
                 <DropDownAllMovie
-                  preMovies={posts.vtubers_movies}
+                  preMovies={posts?.vtubers_movies}
                   setSelectedMovie={setSelectedMovie}
                   // clearMovieHandler={clearMovieHandler}
                 />
