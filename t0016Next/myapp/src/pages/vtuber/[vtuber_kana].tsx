@@ -54,14 +54,6 @@ export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
   };
 
   const [selectedMovie, setSelectedMovie] = useState<string>("");
-  const [filteredKaraokes, setFilteredKarakes] = useState<ReceivedKaraoke[]>(
-    []
-  );
-
-  useEffect(() => {
-    const filterdkaraokes = FilterKaraokesByUrl(karaokes, selectedMovie);
-    setFilteredKarakes(filterdkaraokes);
-  }, [karaokes, selectedMovie]);
 
   // propsとして必要
   const [selectedPost, setSelectedPost] = useState<ReceivedKaraoke>(
@@ -147,7 +139,7 @@ export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
         </div>
         <div className="flex flex-col w-full">
           <KaraokeFilterTableWithoutVTuberName
-            posts={filteredKaraokes}
+            posts={FilterKaraokesByUrl(karaokes, selectedMovie)}
             handleMovieClickYouTube={handleMovieClickYouTube}
             setSelectedPost={setSelectedPost}
           />
