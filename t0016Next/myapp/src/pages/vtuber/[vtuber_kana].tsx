@@ -27,8 +27,8 @@ type VtuberPage = {
 };
 
 export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
-  const karaokes = useMemo(
-    () => posts?.vtubers_movies_karaokes || [{} as ReceivedKaraoke],
+  const karaokes: ReceivedKaraoke[] = useMemo(
+    () => posts?.vtubers_movies_karaokes || [],
     [posts]
   );
 
@@ -122,7 +122,6 @@ export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
               <div id="right" className={`relative  px-1 rounded border`}>
                 <div className="flex py-3 text-black bg-[#FFF6E4] justify-center rounded-xl">
                   <span className="text-xl font-bold mr-2">
-                    {" "}
                     {karaokes?.[0].VtuberName}
                   </span>
                   <span className="mt-1">の歌枠</span>
