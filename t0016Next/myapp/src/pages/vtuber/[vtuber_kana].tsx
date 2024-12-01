@@ -139,7 +139,7 @@ export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
         </div>
         <div className="flex flex-col w-full">
           <KaraokeFilterTableWithoutVTuberName
-            posts={FilterKaraokesByUrl(karaokes, selectedMovie)}
+            posts={filterKaraokesByUrl(karaokes, selectedMovie)}
             handleMovieClickYouTube={handleMovieClickYouTube}
             setSelectedPost={setSelectedPost}
           />
@@ -149,18 +149,11 @@ export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
   );
 }
 
-const FilterKaraokesByUrl = (
-  karaokes: ReceivedKaraoke[],
-  selectedMovie: string
-) => {
-  if (selectedMovie == "") {
+const filterKaraokesByUrl = (karaokes: ReceivedKaraoke[], url: string) => {
+  if (url == "") {
     return karaokes;
-  } else {
-    const choiceKaraoke = karaokes.filter(
-      (karaokes: ReceivedKaraoke) => karaokes.MovieUrl === selectedMovie
-    );
-    return choiceKaraoke;
   }
+  return karaokes.filter((ks) => ks.MovieUrl === url);
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
