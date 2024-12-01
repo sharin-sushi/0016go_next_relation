@@ -122,7 +122,7 @@ export function EditForm({
         }
       } catch (err) {
         alert(
-          "編集失敗\nご自身で登録したデータなのかマイページで確認してください。\n解決しない場合は開発者へお知らせいただけると幸いです。"
+          "編集失敗\nご自身で登録したデータのみ編集できます。マイページで確認してください。\n解決しない場合は開発者へお知らせいただけると幸いです。"
         );
         console.error(err);
       }
@@ -141,7 +141,7 @@ export function EditForm({
         }
       } catch (err) {
         alert(
-          "編集失敗 \n ご自身で登録したデータなのかマイページで確認してください。\n解決しない場合は開発者へお知らせいただけると幸いです。"
+          "編集失敗 \n ご自身で登録したデータのみ編集できます。マイページで確認してください。\n解決しない場合は開発者へお知らせいただけると幸いです。"
         );
         console.error(err);
       }
@@ -249,7 +249,7 @@ export function EditForm({
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col  items-center  underline text-lg text-black">
             <span className="">編集するデータを入力してください</span>
-            <span className="">※ 空欄にすると既存データを維持できます</span>
+            <span className="">※空欄ｓにた項目は編集されません</span>
           </div>
           {crudContentType === "vtuber" && (
             <div>

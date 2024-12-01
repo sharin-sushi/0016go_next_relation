@@ -6,10 +6,8 @@ export const SelectCrudContent = ({
 }: any) => {
   return (
     <div className="w-full">
-      <span className={`flex justify-center items-center`}>
-        登録するコンテンツの種類を選択してください
-      </span>
-      <div id="button_group" className="flex justify-center ">
+      <span className={`flex justify-center`}>データ種類の選択</span>
+      <div id="select_data_type" className="flex justify-center">
         <button
           onClick={() => setCrudContentType("vtuber")}
           className={`${ToClickTW.choice}  mx-2 
