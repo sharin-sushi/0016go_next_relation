@@ -3,10 +3,12 @@
 import React, { useState, useContext } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import axios from "axios";
+import Image from "next/image";
+import Link from "next/link";
 
 import { domain } from "@/../env";
 import { ReceivedKaraoke, FavoriteKaraoke } from "@/types/vtuber_content";
-import { TableCss as TableTW } from "@/styles/tailwiind";
+import { LinkTW, TableCss as TableTW } from "@/styles/tailwiind";
 import { SigninContext } from "@/components/layout/Layout";
 import { ConvertStringToTime } from "@/util";
 import { TableCss } from "@/styles/tailwiind";
@@ -15,7 +17,6 @@ import type {
   KaraokeTablefilterInputProps,
   KaraokeTablePagenationButtonsProps as TablePagenationButtonsProps,
 } from "./types";
-import Image from "next/image";
 
 export const YouTubePlayerContext = React.createContext(
   {} as {
@@ -116,7 +117,30 @@ export function FavoriteColumn({
 }
 
 export const ColumnVtuberName: ColumnDef<ReceivedKaraoke>[] = [
-  { header: "名前", accessorKey: "VtuberName", enableSorting: true },
+  {
+    header: "名前",
+    accessorKey: "VtuberName",
+    enableSorting: true,
+    cell: ({ row }: { row: { original: ReceivedKaraoke } }) => {
+      return (
+        <span className="relative">
+          <Link
+            href={`/vtuber/${row.original.VtuberKana}`}
+            className={`flex ${LinkTW.base}`}
+          >
+            <Image
+              src="/content/external_link.svg"
+              className="w-5 mr-1"
+              width={24}
+              height={20}
+              alt=""
+            />
+            {row.original.VtuberName}
+          </Link>
+        </span>
+      );
+    },
+  },
 ];
 
 export const KaraokeBasicColumuns: ColumnDef<ReceivedKaraoke>[] = [
@@ -153,7 +177,7 @@ export const KaraokeBasicColumuns: ColumnDef<ReceivedKaraoke>[] = [
       return (
         <div className="relative flex w-auto">
           <button
-            className="flex"
+            className={`flex ${LinkTW.base}`}
             onClick={() => handleClickPlay(row.original)}
           >
             <Image
@@ -170,10 +194,10 @@ export const KaraokeBasicColumuns: ColumnDef<ReceivedKaraoke>[] = [
             <button className="flex " onClick={() => handleClick()}>
               <Image
                 src="/content/copy_gray.svg"
-                className="h-4 mr-2"
-                width={24}
-                height={20}
-                alt=""
+                className="h-5 mr-2 flex hover:bg-[#B7A692] stroke-2  rounded-md"
+                alt={""}
+                width={18}
+                height={18}
               />
             </button>
             {isDisplay && (
@@ -206,7 +230,24 @@ export const KaraokeBasicColumuns: ColumnDef<ReceivedKaraoke>[] = [
 ];
 
 export const KaraokeGlobalFilterColumns: ColumnDef<ReceivedKaraoke>[] = [
-  { header: "名前", accessorKey: "VtuberName", enableSorting: true },
+  // TODO:　クリックでfilterしたい
+  {
+    header: "名前",
+    accessorKey: "VtuberName",
+    enableSorting: true,
+    cell: ({ row }: { row: { original: ReceivedKaraoke } }) => {
+      return (
+        <span className="relative">
+          <Link
+            href={`/vtuber/${row.original.VtuberKana}`}
+            className={`flex ${LinkTW.base}`}
+          >
+            {row.original.VtuberName}
+          </Link>
+        </span>
+      );
+    },
+  },
   ...KaraokeBasicColumuns,
 ];
 

@@ -1,12 +1,13 @@
 import React, { useContext, useState } from "react";
 import { useTable, useSortBy, Column, useRowSelect } from "react-table";
+import Link from "next/link";
 
 import { domain } from "@/../env";
 import { ExtractVideoId } from "@/util";
 import axios from "axios";
 import { ReceivedMovie, FavoriteMovie } from "@/types/vtuber_content";
 import { ToDeleteContext } from "@/pages/crud/delete";
-import { TableCss } from "@/styles/tailwiind";
+import { LinkTW, TableCss } from "@/styles/tailwiind";
 import { SigninContext } from "../layout/Layout";
 import Image from "next/image";
 
@@ -92,7 +93,29 @@ export function MovieTable({
 }
 
 const columns: Column<ReceivedMovie>[] = [
-  { Header: "VTuber", accessor: "VtuberName" },
+  {
+    Header: "VTuber(click it)",
+    accessor: "VtuberName",
+    Cell: ({ row }: { row: { original: ReceivedMovie } }) => {
+      return (
+        <span className="relative">
+          <Link
+            href={`/vtuber/${row.original.VtuberKana}`}
+            className={`flex ${LinkTW.base}`}
+          >
+            <Image
+              src="/content/external_link.svg"
+              className="w-5 mr-1"
+              width={24}
+              height={20}
+              alt=""
+            />
+            {row.original.VtuberName}
+          </Link>
+        </span>
+      );
+    },
+  },
   {
     Header: "歌枠 (Click it)",
     accessor: "MovieTitle",
@@ -101,7 +124,7 @@ const columns: Column<ReceivedMovie>[] = [
       return (
         <span className="relative">
           <button
-            className="flex"
+            className={`flex ${LinkTW.base}`}
             onClick={() => handleMovieClickYouTube(row.original.MovieUrl, 1)}
           >
             <Image
