@@ -120,14 +120,14 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
                 className="absolute mt-7 m w-[98%] md:w-[99%] overflow-y-scroll h-[82%] md:h-[88%] "
               >
                 <KaraokeThinTable
-                  posts={posts?.latest_karaokes}
+                  posts={posts.latest_karaokes}
                   handleMovieClickYouTube={handleMovieClickYouTube}
                 />
               </div>
             </div>
           </div>
 
-          {posts?.vtubers.length == 0 && <FailedMessge />}
+          {posts.vtubers.length == 0 && <FailedMessge />}
 
           <div
             id="feature"
