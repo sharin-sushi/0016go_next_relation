@@ -105,6 +105,7 @@ export const CreatePage = ({ posts, isSignin }: CreatePageProps) => {
                 setSelectedMovie={setSelectedMovie}
                 setSelectedKaraoke={setSelectedKaraoke}
                 clearMovieHandler={clearMovieHandler}
+                setCurrentVideoId={setCurrentVideoId}
               />
             </div>
           </div>

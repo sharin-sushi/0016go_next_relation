@@ -59,6 +59,7 @@ export const YouTubeTW = {
 
 export const FormTW = {
   need: "bg-[#ff0000] text-white text-[10px] font-bold px-0.5 py-0 rounded-md h-4",
+  auto: "bg-[#ff5555] text-white text-[10px] font-bold px-0.5 py-0 rounded-md h-4",
   label: "block text-gray-700 text-sm font-bold ",
   // horizon: "border-[#2e9836] border-2 mx-10 my-2",
   horizon: "border-[#66a962] border-2 mx-10 my-2",
