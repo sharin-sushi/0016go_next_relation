@@ -141,14 +141,6 @@ func (controller *Controller) CreateMovie(c *gin.Context) {
 }
 
 func (controller *Controller) CreateKaraoke(c *gin.Context) {
-	listenerId, err := common.TakeListenerIdFromJWT(c)
-	if err != nil {
-		fmt.Println("err: jwt,", err)
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Error fetching listener info",
-		})
-		return
-	}
 	var karaoke domain.Karaoke
 	if err := c.ShouldBind(&karaoke); err != nil {
 		fmt.Println("err: ShoulBind karaoke,", err)
@@ -157,7 +149,17 @@ func (controller *Controller) CreateKaraoke(c *gin.Context) {
 		})
 		return
 	}
+	listenerId, err := common.TakeListenerIdFromJWT(c)
+	fmt.Println("listenerId", listenerId)
+	if err != nil {
+		fmt.Println("err: jwt,", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Error fetching listener info",
+		})
+		return
+	}
 	karaoke.KaraokeInputterId = listenerId
+
 	if err := controller.VtuberContentInteractor.CreateKaraoke(karaoke); err != nil {
 		fmt.Println("err: create karaoke,", err)
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -479,7 +481,7 @@ func (controller *Controller) ReturnTopPageData(c *gin.Context) {
 		errs = append(errs, err)
 	}
 
-	LatestVtsMosKasWithFav, err := controller.FavoriteInteractor.GetLatest50VtubersMoviesKaraokesWithFavCnts(guestId)
+	LatestVtsMosKasWithFav, err := controller.FavoriteInteractor.GetLatest50VtubersMoviesKaraokesWithFavCnts(guestID)
 	if err != nil {
 		errs = append(errs, err)
 	}

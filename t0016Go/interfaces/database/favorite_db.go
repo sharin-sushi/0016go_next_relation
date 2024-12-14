@@ -275,13 +275,12 @@ func (db *FavoriteRepository) FindMoviesFavoritedByListenerId(lId domain.Listene
 	fmt.Print("interfaces/database/favorite.go\n")
 	var Mos []domain.Movie
 	var tmMos []domain.TransmitMovie
-	var errs []error
 	var err error
 	joinsQOfVtsMos := "LEFT JOIN vtubers USING(vtuber_id)"
 	whereOfVtsMos := fmt.Sprintf("where movies.inputter_listener_id = %v", lId)
 	err = db.Model(Mos).Where(whereOfVtsMos).Joins(joinsQOfVtsMos).Scan(&tmMos).Error
 	if err != nil {
-		errs = append(errs, err)
+		return nil, err
 	}
 	return tmMos, err
 }
@@ -290,13 +289,12 @@ func (db *FavoriteRepository) FindKaraokesFavoritedByListenerId(lId domain.Liste
 	var err error
 	var tmKas []domain.TransmitKaraoke
 	var Kas []domain.Karaoke
-	var errs []error
 	var VtsMosKas []domain.VtuberMovieKaraoke
 	joinsQOfVtsMosKas := "LEFT JOIN movies USING(movie_url) LEFT JOIN vtubers USING(vtuber_id)"
 	whereOfVtsMosKas := fmt.Sprintf("where karaoke_lists.inputter_listener_id = %v", lId)
 	err = db.Model(Kas).Where(whereOfVtsMosKas).Joins(joinsQOfVtsMosKas).Scan(&VtsMosKas).Error
 	if err != nil {
-		errs = append(errs, err)
+		return nil, err
 	}
 	return tmKas, err
 }
