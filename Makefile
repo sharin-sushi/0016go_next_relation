@@ -12,6 +12,14 @@ db-be:
 fe:
 	cd t0016Next/myapp && npm run dev
 
+.PHONY: fe-build
+fe-build:
+	cd t0016Next/myapp && npm run build
+
+.PHONY: fe-start
+fe-start:
+	cd t0016Next/myapp && npm run start
+
 .PHONY: mysql
 mysql:
 	mysql -uroot -ppassword --host 127.0.0.1
