@@ -18,7 +18,8 @@ import { CreateContentFormDescription } from "@/features/description";
 
 const pageName = "コンテンツ登録";
 
-export const CreatePage = ({ posts, isSignin }: CreatePageProps) => {
+export const CreatePage = ({ posts: data, isSignin }: CreatePageProps) => {
+  const [posts, setPosts] = useState(data);
   const movies = useMemo(
     () => posts?.vtubers_movies || ([] as ReceivedMovie[]),
     [posts]
@@ -33,6 +34,8 @@ export const CreatePage = ({ posts, isSignin }: CreatePageProps) => {
   const [selectedKaraoke, setSelectedKaraoke] = useState<number>(0);
   const [currentVideoId, setCurrentVideoId] = useState<string>("9ehwhQJ50gs");
   const [currentStart, setCurrentStart] = useState<number>(0);
+  // TODO: 命名再考
+  const [preRender, setPreRender] = useState<boolean>(true);
 
   useEffect(() => {
     const foundMovie = movies.find(
@@ -106,6 +109,9 @@ export const CreatePage = ({ posts, isSignin }: CreatePageProps) => {
                 setSelectedKaraoke={setSelectedKaraoke}
                 clearMovieHandler={clearMovieHandler}
                 setCurrentVideoId={setCurrentVideoId}
+                setRerendaringFlag={setPreRender}
+                key={preRender ? "0" : "1"}
+                setPosts={setPosts}
               />
             </div>
           </div>
