@@ -579,7 +579,7 @@ export const KaraokeThinTable = ({
                   <th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     className="px-2"
-                    key={i}
+                    key={`karoake_thin_table_header_${i}`}
                   >
                     {column.render("Header")}
                     {column.isSorted ? (
@@ -754,7 +754,7 @@ const deleteColumns: Column<ReceivedKaraoke>[] = [
     accessor: "VtuberName",
     Cell: ({ row }: { row: { original: ReceivedKaraoke } }) => {
       return (
-        <span className="relative">
+        <span key={row.original.VtuberId} className="relative">
           <Link
             href={`/vtuber/${row.original.VtuberKana}`}
             className={`flex ${LinkTW.base}`}
@@ -904,10 +904,7 @@ const randam5columns: Column<ReceivedKaraoke>[] = [
           </div>
 
           <div className="flex flex-row">
-            <button
-              className="absolute right-0"
-              onClick={() => handleClickClipUrl()}
-            >
+            <button className="absolute right-0" onClick={handleClickClipUrl}>
               <Image
                 src="/content/copy_gray.svg"
                 className="h-5 mr-2 flex hover:bg-[#B7A692] stroke-2  rounded-md"
@@ -955,6 +952,7 @@ export const KaraokeMinRandamTable = ({
     }
   }, []);
 
+  // TODO: 何のためにあるのか分からない。消す。
   const [shuffledData, setShuffledData] = useState<ReceivedKaraoke[]>(
     shuffleArray(karaokes)
   );
@@ -981,10 +979,10 @@ export const KaraokeMinRandamTable = ({
           <div className="w-full overflow-scroll md:overflow-hidden">
             <table {...getTableProps()} className={`${TableTW.minRandom} `}>
               <thead className={`${TableTW.regularThead}`}>
-                {headerGroups.map((headerGroup) => (
+                {headerGroups.map((headerGroup, i) => (
                   <tr
                     {...headerGroup.getHeaderGroupProps()}
-                    key={headerGroup.id}
+                    key={`delete_header_${i}`}
                   >
                     {headerGroup.headers.map((column, i) => (
                       <th {...column.getHeaderProps()} key={i}>

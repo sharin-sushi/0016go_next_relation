@@ -37,7 +37,10 @@ export function MovieTable({
         <table {...getTableProps()} className={`${TableCss.regular} `}>
           <thead className={`${TableCss.regularThead}`}>
             {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
+              <tr
+                {...headerGroup.getHeaderGroupProps()}
+                key={`record_${headerGroup.id}`}
+              >
                 {headerGroup.headers.map((column) => (
                   <th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
@@ -253,7 +256,6 @@ export function MovieDeleteTable({
   handleMovieClickYouTube,
 }: MovieDeleteTableProps) {
   const data = posts || {};
-  console.log("MovieTable.data", data);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns: deleteColumns, data }, useSortBy, useRowSelect);
 
