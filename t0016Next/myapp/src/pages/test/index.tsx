@@ -24,7 +24,7 @@ import { ContextType } from "@/types/server";
 import { TestLink } from "./multi";
 import { checkLoggedin } from "@/util/webStrage/cookie";
 
-const lastUpdatedAtString = "2024.11.23";
+const lastUpdatedAtString = "2024.12.15";
 
 const pageName = "test";
 const pageNum = 0;
@@ -41,10 +41,10 @@ type TopPage = {
 };
 
 const TopPage = ({ posts, isSignin }: TopPage) => {
-  const vtubers = posts?.vtubers || [{} as ReceivedVtuber];
-  const movies = posts?.vtubers_movies || [{} as ReceivedMovie];
-  const karaokes = posts?.vtubers_movies_karaokes || [{} as ReceivedKaraoke];
-  const latestKaraokes = posts?.latest_karaokes || [{} as ReceivedKaraoke];
+  const vtubers: ReceivedVtuber[] = posts?.vtubers || [];
+  const movies: ReceivedMovie[] = posts?.vtubers_movies || [];
+  const karaokes: ReceivedKaraoke[] = posts?.vtubers_movies_karaokes || [];
+  const latestKaraokes: ReceivedKaraoke[] = posts?.latest_karaokes || [];
   const [start, setStart] = useState<number>(ConvertStringToTime("00:06:45"));
   const [currentMovieId, setCurrentMovieId] = useState<string>("AlHRqSsF--8");
 
