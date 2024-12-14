@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ReceivedVtuber } from "@/types/vtuber_content";
 import TableStyle from "@/styles/table.module.css";
 import { ToDeleteContext } from "@/pages/crud/delete";
-import { TableCss } from "@/styles/tailwiind";
+import { LinkTW, TableCss } from "@/styles/tailwiind";
 import Image from "next/image";
 
 type VtuberTableProps = {
@@ -89,7 +89,10 @@ const columns: Column<ReceivedVtuber>[] = [
     Cell: ({ row }: { row: { original: ReceivedVtuber } }) => {
       return (
         <span className="relative">
-          <Link href={`/vtuber/${row.original.VtuberKana}`} className="flex">
+          <Link
+            href={`/vtuber/${row.original.VtuberKana}`}
+            className={`flex ${LinkTW.base}`}
+          >
             <Image
               src="/content/external_link.svg"
               className="w-5 mr-1"
@@ -109,27 +112,25 @@ const columns: Column<ReceivedVtuber>[] = [
     accessor: "IntroMovieUrl",
     Cell: ({ row }: { row: { original: ReceivedVtuber } }) => {
       return (
-        <span className="relative">
-          <>
-            {(row.original.IntroMovieUrl && (
-              <Link
-                href={`https://${row.original.IntroMovieUrl}`}
-                className="flex"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  src="/content/external_link.svg"
-                  className="w-5 mr-2"
-                  width={24}
-                  height={20}
-                  alt=""
-                />
-                YouTubeへ
-              </Link>
-            )) || <span className={`pl-7`}>未登録</span>}
-          </>
-        </span>
+        <div className="relative w-28">
+          {(row.original.IntroMovieUrl && (
+            <Link
+              href={`https://${row.original.IntroMovieUrl}`}
+              className={`flex ${LinkTW.base}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src="/content/external_link.svg"
+                className="w-5 mr-2"
+                width={24}
+                height={20}
+                alt=""
+              />
+              YouTubeへ
+            </Link>
+          )) || <span className={`relative pl-7`}>未登録</span>}
+        </div>
       );
     },
   },
@@ -212,27 +213,25 @@ const deleteColumns: Column<ReceivedVtuber>[] = [
     accessor: "IntroMovieUrl",
     Cell: ({ row }: { row: { original: ReceivedVtuber } }) => {
       return (
-        <span className="relative">
-          <>
-            {(row.original.IntroMovieUrl && (
-              <Link
-                href={`https://${row.original.IntroMovieUrl}`}
-                className="flex"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  src="/content/play_black.svg"
-                  className="w-5 mr-2"
-                  width={24}
-                  height={20}
-                  alt=""
-                />
-                YouTubeへ
-              </Link>
-            )) || <span className={`pl-7`}>未登録</span>}
-          </>
-        </span>
+        <div className="relative">
+          {(row.original.IntroMovieUrl && (
+            <Link
+              href={`https://${row.original.IntroMovieUrl}`}
+              className={`flex ${LinkTW.base}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src="/content/play_black.svg"
+                className="w-5 mr-2"
+                width={24}
+                height={20}
+                alt=""
+              />
+              YouTubeへ
+            </Link>
+          )) || <span className={`pl-7`}>未登録</span>}
+        </div>
       );
     },
   },
@@ -247,7 +246,7 @@ const deleteColumns: Column<ReceivedVtuber>[] = [
       return (
         <>
           {row.original.VtuberId != undefined && (
-            <button onClick={() => clickHandler()}>
+            <button className={`${LinkTW.base}`} onClick={clickHandler}>
               <u>削除</u>
             </button>
           )}

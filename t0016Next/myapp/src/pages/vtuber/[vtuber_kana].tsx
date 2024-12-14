@@ -27,8 +27,8 @@ type VtuberPage = {
 };
 
 export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
-  const karaokes = useMemo(
-    () => posts?.vtubers_movies_karaokes || [{} as ReceivedKaraoke],
+  const karaokes: ReceivedKaraoke[] = useMemo(
+    () => posts?.vtubers_movies_karaokes || [],
     [posts]
   );
 
@@ -54,14 +54,6 @@ export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
   };
 
   const [selectedMovie, setSelectedMovie] = useState<string>("");
-  const [filteredKaraokes, setFilteredKarakes] = useState<ReceivedKaraoke[]>(
-    []
-  );
-
-  useEffect(() => {
-    const filterdkaraokes = FilterKaraokesByUrl(karaokes, selectedMovie);
-    setFilteredKarakes(filterdkaraokes);
-  }, [karaokes, selectedMovie]);
 
   // propsとして必要
   const [selectedPost, setSelectedPost] = useState<ReceivedKaraoke>(
@@ -122,14 +114,13 @@ export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
               <div id="right" className={`relative  px-1 rounded border`}>
                 <div className="flex py-3 text-black bg-[#FFF6E4] justify-center rounded-xl">
                   <span className="text-xl font-bold mr-2">
-                    {" "}
                     {karaokes?.[0].VtuberName}
                   </span>
                   <span className="mt-1">の歌枠</span>
                 </div>
                 <span>動画絞込み（入力できます）</span>
                 <DropDownAllMovie
-                  preMovies={posts.vtubers_movies}
+                  preMovies={posts?.vtubers_movies}
                   setSelectedMovie={setSelectedMovie}
                   // clearMovieHandler={clearMovieHandler}
                 />
@@ -148,7 +139,7 @@ export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
         </div>
         <div className="flex flex-col w-full">
           <KaraokeFilterTableWithoutVTuberName
-            posts={filteredKaraokes}
+            posts={filterKaraokesByUrl(karaokes, selectedMovie)}
             handleMovieClickYouTube={handleMovieClickYouTube}
             setSelectedPost={setSelectedPost}
           />
@@ -158,18 +149,11 @@ export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
   );
 }
 
-const FilterKaraokesByUrl = (
-  karaokes: ReceivedKaraoke[],
-  selectedMovie: string
-) => {
-  if (selectedMovie == "") {
+const filterKaraokesByUrl = (karaokes: ReceivedKaraoke[], url: string) => {
+  if (url == "") {
     return karaokes;
-  } else {
-    const choiceKaraoke = karaokes.filter(
-      (karaokes: ReceivedKaraoke) => karaokes.MovieUrl === selectedMovie
-    );
-    return choiceKaraoke;
   }
+  return karaokes.filter((ks) => ks.MovieUrl === url);
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {

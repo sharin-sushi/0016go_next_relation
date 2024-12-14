@@ -9,7 +9,7 @@ import (
 	"github.com/sharin-sushi/0016go_next_relation/interfaces/v1/controllers/common"
 )
 
-var guestId = common.GetGuestListenerId()
+var guestID = common.GetGuestListenerID()
 
 func (controller *Controller) CreateUser(c *gin.Context) {
 	fmt.Printf("start `CreateUser` at interfaces/v1/controllers/users.go \n")
@@ -97,7 +97,7 @@ func (controller *Controller) LogicalDeleteUser(c *gin.Context) {
 			"err":     err,
 		})
 		return
-	} else if tokenLId == guestId {
+	} else if tokenLId == guestID {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Guest Acc. must NOT Withdrawal",
 		})
@@ -185,7 +185,8 @@ func Logout(c *gin.Context) {
 }
 
 func GuestLogIn(c *gin.Context) {
-	common.SetListenerIdintoCookie(c, guestId)
+	fmt.Println(guestID)
+	common.SetListenerIdintoCookie(c, guestID)
 	c.JSON(http.StatusOK, gin.H{
 		"message":      "Successfully Guest Logged In",
 		"listenerName": "guest",

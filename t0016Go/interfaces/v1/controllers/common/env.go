@@ -26,9 +26,9 @@ func GetEnvHostDomain() string {
 	return "localhost"
 }
 
-func GetGuestListenerId() domain.ListenerId {
-	stringGuestId, _ := strconv.Atoi(os.Getenv("GUEST_USER_ID"))
-	guestId := domain.ListenerId(stringGuestId)
-	fmt.Printf("guestId:%v\n", guestId)
-	return guestId
+func GetGuestListenerID() domain.ListenerId {
+	stringGuestID, _ := strconv.Atoi(os.Getenv("GUEST_USER_ID"))
+	guestID := domain.ListenerId(stringGuestID)
+	fmt.Printf("guestId:%v\n", guestID)
+	return guestID
 }

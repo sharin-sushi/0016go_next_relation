@@ -11,7 +11,8 @@ import (
 
 func Routing(r *gin.Engine) {
 	routingV1(r)
-	routingV2(r)
+	// 1つでもhandlerを実装したら開放する
+	// routingV2(r)
 }
 
 // フロントで移行でき次第、１つずつも呼び出してるメソッドと共に削除していく。
@@ -71,6 +72,7 @@ func routingV1(r *gin.Engine) {
 
 }
 
+//lint:ignore U1000 (何かしら実装したら使う予定)
 func routingV2(r *gin.Engine) {
 	controller := controllers2.NewController(dbInit())
 	var v2 = r.Group("/v2")

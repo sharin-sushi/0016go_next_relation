@@ -22,7 +22,8 @@ import { ContextType } from "@/types/server";
 import Image from "next/image";
 import { TopPageNotice } from "@/features/notice/notice";
 import { checkLoggedin } from "@/util/webStrage/cookie";
-import { ExtractVideoId } from "@/util";
+import { ConvertStringToTime, ExtractVideoId } from "@/util";
+import { generateRandomNumber } from "@/components/SomeFunction";
 
 const pageName = "Top";
 
@@ -37,12 +38,18 @@ type TopPage = {
 };
 
 const TopPage = ({ posts, isSignin }: TopPage) => {
-  const vtubers = posts?.vtubers || ([] as ReceivedVtuber[]);
-  const movies = posts?.vtubers_movies || ([] as ReceivedMovie[]);
-  const karaokes = posts?.vtubers_movies_karaokes || ([] as ReceivedKaraoke[]);
-  const latestKaraokes = posts?.latest_karaokes || ([] as ReceivedKaraoke[]);
-  const [start, setStart] = useState<number>(36 * 60 + 41);
-  const [currentMovieId, setCurrentMovieId] = useState<string>("E7x2TZ1_Ys4");
+  const url = "www.youtube.com/watch?v=E7x2TZ1_Ys4"; // 【オフコラボ】#VTuberカラオケ女子会 ～ノイタミナアニメ縛り～【朝ノ瑠璃／久遠たま／柾花音／ChumuNote】
+  const stringTime = "36 * 60 + 41"; //  (柾花音) Departures 〜あなたにおくるアイの歌〜 / EGOIST / TVアニメ『ギルティクラウン』ED
+  const playKaraokeNumber = generateRandomNumber(posts?.latest_karaokes.length);
+  const primaryYoutubeUrl = ExtractVideoId(
+    posts?.latest_karaokes[playKaraokeNumber]?.MovieUrl || url
+  );
+  const primaryYoutubeStartTime = ConvertStringToTime(
+    posts?.latest_karaokes[playKaraokeNumber]?.SingStart || stringTime
+  );
+  const [currentMovieId, setCurrentMovieId] =
+    useState<string>(primaryYoutubeUrl);
+  const [start, setStart] = useState<number>(primaryYoutubeStartTime);
 
   const handleMovieClickYouTube = (url: string, start: number) => {
     //クリティカルな環境バグなので再発時用に残しておく
@@ -110,17 +117,17 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
 
               <div
                 id="table"
-                className="absolute  mt-7 m w-[98%] md:w-[99%] overflow-scroll h-[82%] md:h-[88%] "
+                className="absolute mt-7 m w-[98%] md:w-[99%] overflow-y-scroll h-[82%] md:h-[88%] "
               >
                 <KaraokeThinTable
-                  posts={latestKaraokes}
+                  posts={posts?.latest_karaokes}
                   handleMovieClickYouTube={handleMovieClickYouTube}
                 />
               </div>
             </div>
           </div>
 
-          {vtubers.length == 0 && <FailedMessge />}
+          {posts?.vtubers.length == 0 && <FailedMessge />}
 
           <div
             id="feature"
@@ -139,7 +146,7 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
               </div>
 
               <div>
-                <VtuberTable posts={vtubers} />
+                <VtuberTable posts={posts?.vtubers} />
                 <br />
                 <h2 className="flex">
                   <Image
@@ -152,7 +159,7 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
                   歌枠(動画)
                 </h2>
                 <MovieTable
-                  posts={movies}
+                  posts={posts?.vtubers_movies}
                   handleMovieClickYouTube={handleMovieClickYouTube}
                 />
                 <br />
@@ -167,7 +174,7 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
                   歌
                 </h2>
                 <KaraokeMinRandamTable
-                  posts={karaokes}
+                  posts={posts?.vtubers_movies_karaokes}
                   handleMovieClickYouTube={handleMovieClickYouTube}
                 />
               </div>

@@ -7,13 +7,14 @@ import {
   useRowSelect,
 } from "react-table";
 import axios from "axios";
+import Link from "next/link";
 
 import { domain } from "@/../env";
 import { ConvertStringToTime, ExtractVideoId } from "@/util";
 import { shuffleArray } from "../SomeFunction";
 import { ReceivedKaraoke, FavoriteKaraoke } from "@/types/vtuber_content";
 import { ToDeleteContext } from "@/pages/crud/delete";
-import { TableCss as TableTW } from "@/styles/tailwiind";
+import { LinkTW, TableCss as TableTW } from "@/styles/tailwiind";
 import { SigninContext } from "@/components/layout/Layout";
 import Image from "next/image";
 
@@ -29,7 +30,29 @@ export const YouTubePlayerContext = React.createContext(
 );
 
 const columns: Column<ReceivedKaraoke>[] = [
-  { Header: "VTuber", accessor: "VtuberName" },
+  {
+    Header: "VTuber(click it)",
+    accessor: "VtuberName",
+    Cell: ({ row }: { row: { original: ReceivedKaraoke } }) => {
+      return (
+        <span className="relative">
+          <Link
+            href={`/vtuber/${row.original.VtuberKana}`}
+            className={`flex ${LinkTW.base}`}
+          >
+            <Image
+              src="/content/external_link.svg"
+              className="w-5 mr-1"
+              width={24}
+              height={20}
+              alt=""
+            />
+            {row.original.VtuberName}
+          </Link>
+        </span>
+      );
+    },
+  },
   {
     Header: "曲名(Click it)",
     accessor: "KaraokeId",
@@ -61,7 +84,7 @@ const columns: Column<ReceivedKaraoke>[] = [
           >
             <Image
               src="/content/play_black.svg"
-              className="w-5 mr-1 bottom-0"
+              className="w-5 mr-1 bottom-0 "
               width={24}
               height={20}
               alt={""}
@@ -73,7 +96,7 @@ const columns: Column<ReceivedKaraoke>[] = [
             <button className="flex" onClick={() => handleClick()}>
               <Image
                 src="/content/copy_gray.svg"
-                className="h-4 mr-2"
+                className="h-5 mr-2 flex hover:bg-[#B7A692] stroke-2  rounded-md"
                 width={24}
                 height={20}
                 alt={""}
@@ -245,10 +268,10 @@ const PagenationReturnPostcolumns: Column<ReceivedKaraoke>[] = [
             <button className="flex " onClick={() => handleClick()}>
               <Image
                 src="/content/copy_gray.svg"
-                className="h-4 mr-2"
-                width={24}
-                height={20}
+                className="h-5 mr-2 flex hover:bg-[#B7A692] stroke-2  rounded-md"
                 alt={""}
+                width={18}
+                height={18}
               />
             </button>
             {isDisplay && (
@@ -439,7 +462,29 @@ export function KaraokePagenatoinTable({
 ///////////////////////////////////////////////////
 // // top youtube横　カラム少な目→api側未調整（余計なデータがを渡されている状態）
 const ThinColumns: Column<ReceivedKaraoke>[] = [
-  { Header: "VTuber", accessor: "VtuberName" },
+  {
+    Header: "VTuber(click it)",
+    accessor: "VtuberName",
+    Cell: ({ row }: { row: { original: ReceivedKaraoke } }) => {
+      return (
+        <span className="relative">
+          <Link
+            href={`/vtuber/${row.original.VtuberKana}`}
+            className={`flex ${LinkTW.base}`}
+          >
+            <Image
+              src="/content/external_link.svg"
+              className="w-5 mr-1"
+              width={24}
+              height={20}
+              alt=""
+            />
+            {row.original.VtuberName}
+          </Link>
+        </span>
+      );
+    },
+  },
   {
     Header: "曲名(Click it)",
     accessor: "KaraokeId",
@@ -461,7 +506,7 @@ const ThinColumns: Column<ReceivedKaraoke>[] = [
       return (
         <span className="relative flex w-auto">
           <button
-            className="flex overflow-hidden"
+            className={`flex overflow-hidden ${LinkTW.base}`}
             onClick={() =>
               handleMovieClickYouTube(
                 row.original.MovieUrl,
@@ -480,13 +525,13 @@ const ThinColumns: Column<ReceivedKaraoke>[] = [
           </button>
 
           <span className="absolute right-0 ">
-            <button className="flex" onClick={() => handleClick()}>
+            <button onClick={handleClick}>
               <Image
                 src="/content/copy_gray.svg"
-                className="h-4 mr-2 "
+                className="h-5 mr-2 flex hover:bg-[#B7A692] stroke-2  rounded-md"
                 alt={""}
-                width={24}
-                height={20}
+                width={18}
+                height={18}
               />
             </button>
             {isDisplay && (
@@ -534,7 +579,7 @@ export const KaraokeThinTable = ({
                   <th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     className="px-2"
-                    key={i}
+                    key={`karoake_thin_table_header_${i}`}
                   >
                     {column.render("Header")}
                     {column.isSorted ? (
@@ -704,7 +749,29 @@ export function KaraokeDeleteTable({
 }
 
 const deleteColumns: Column<ReceivedKaraoke>[] = [
-  { Header: "VTuber", accessor: "VtuberName" },
+  {
+    Header: "VTuber(click it)",
+    accessor: "VtuberName",
+    Cell: ({ row }: { row: { original: ReceivedKaraoke } }) => {
+      return (
+        <span key={row.original.VtuberId} className="relative">
+          <Link
+            href={`/vtuber/${row.original.VtuberKana}`}
+            className={`flex ${LinkTW.base}`}
+          >
+            <Image
+              src="/content/external_link.svg"
+              className="w-5 mr-1"
+              width={24}
+              height={20}
+              alt=""
+            />
+            {row.original.VtuberName}
+          </Link>
+        </span>
+      );
+    },
+  },
   {
     Header: "曲",
     accessor: "SongName",
@@ -754,8 +821,8 @@ const deleteColumns: Column<ReceivedKaraoke>[] = [
       return (
         <>
           {row.original.KaraokeId != undefined && (
-            <button onClick={() => clickHandler()}>
-              <u>削除</u>
+            <button className={`${LinkTW.base}`} onClick={() => clickHandler()}>
+              削除
             </button>
           )}
         </>
@@ -770,7 +837,29 @@ const deleteColumns: Column<ReceivedKaraoke>[] = [
 // (+αはフロント側で完結するランダム更新機能を実装するために必要)
 
 const randam5columns: Column<ReceivedKaraoke>[] = [
-  { Header: "VTuber", accessor: "VtuberName" },
+  {
+    Header: "VTuber(click it)",
+    accessor: "VtuberName",
+    Cell: ({ row }: { row: { original: ReceivedKaraoke } }) => {
+      return (
+        <span className="relative">
+          <Link
+            href={`/vtuber/${row.original.VtuberKana}`}
+            className={`flex ${LinkTW.base}`}
+          >
+            <Image
+              src="/content/external_link.svg"
+              className="w-5 mr-1"
+              width={24}
+              height={20}
+              alt=""
+            />
+            {row.original.VtuberName}
+          </Link>
+        </span>
+      );
+    },
+  },
   {
     Header: "曲名(Click it)",
     accessor: "KaraokeId",
@@ -815,16 +904,13 @@ const randam5columns: Column<ReceivedKaraoke>[] = [
           </div>
 
           <div className="flex flex-row">
-            <button
-              className="absolute right-0"
-              onClick={() => handleClickClipUrl()}
-            >
+            <button className="absolute right-0" onClick={handleClickClipUrl}>
               <Image
                 src="/content/copy_gray.svg"
-                className="h-4 mr-2"
+                className="h-5 mr-2 flex hover:bg-[#B7A692] stroke-2  rounded-md"
                 alt={""}
-                width={24}
-                height={20}
+                width={18}
+                height={18}
               />
             </button>
             {isDisplay && (
@@ -866,6 +952,7 @@ export const KaraokeMinRandamTable = ({
     }
   }, []);
 
+  // TODO: 何のためにあるのか分からない。消す。
   const [shuffledData, setShuffledData] = useState<ReceivedKaraoke[]>(
     shuffleArray(karaokes)
   );
@@ -892,10 +979,10 @@ export const KaraokeMinRandamTable = ({
           <div className="w-full overflow-scroll md:overflow-hidden">
             <table {...getTableProps()} className={`${TableTW.minRandom} `}>
               <thead className={`${TableTW.regularThead}`}>
-                {headerGroups.map((headerGroup) => (
+                {headerGroups.map((headerGroup, i) => (
                   <tr
                     {...headerGroup.getHeaderGroupProps()}
-                    key={headerGroup.id}
+                    key={`delete_header_${i}`}
                   >
                     {headerGroup.headers.map((column, i) => (
                       <th {...column.getHeaderProps()} key={i}>

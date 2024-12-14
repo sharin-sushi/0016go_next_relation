@@ -64,6 +64,10 @@ export const FormTW = {
   horizon: "border-[#66a962] border-2 mx-10 my-2",
 };
 
+export const LinkTW = {
+  base: `hover:underline hover:font-bold`,
+};
+
 // #b3d854 葉脈の本筋の明るいところ (蛍光黄色みたいな緑)
 // #88ba54 葉っぱの濃いところ (↓より明るい)
 // #66a962 しもべの葉 (明るい黄緑)
