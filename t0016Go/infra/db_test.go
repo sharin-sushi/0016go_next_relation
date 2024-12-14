@@ -26,20 +26,7 @@ func getMockDB() (*gorm.DB, sqlmock.Sqlmock, error) {
 	return gormdb, mock, nil
 }
 
-func testMigrate(db *gorm.DB) error {
-	db.AutoMigrate(
-		// User
-		domain.Listener{},
-		// Like Relatoin
-		domain.Favorite{}, domain.Follow{},
-		// Vtuber Contents
-		domain.Karaoke{}, domain.Movie{}, domain.Vtuber{}, domain.OriginalSong{},
-	)
-	return nil
-}
-
-///////////以下、クエリ生成のテストコード///////////
-
+// /////////以下、クエリ生成のテストコード///////////
 func TestSqlHandler_Create(t *testing.T) {
 	userBody := getCreateUser()
 

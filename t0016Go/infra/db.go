@@ -14,8 +14,6 @@ import (
 	"github.com/sharin-sushi/0016go_next_relation/interfaces/v1/controllers/common"
 )
 
-var isDidDBMigration bool
-
 type SqlHandler struct {
 	Conn *gorm.DB
 }
@@ -68,7 +66,7 @@ func dbInit() database.SqlHandler {
 		}
 	} else if common.IsOnLoclaWithDockerCompose {
 		fmt.Println("common.IsOnLoclaWithDockerCompose : true")
-		// Golangはローカルのdocker-compose or  VSCodeで起動
+		// Golangはローカルのdocker-compose or ターミナルの go run で起動
 		// MySQLはローカルのdocker上(compose使用) で起動
 		if user == "" {
 			user = "root"
@@ -80,10 +78,12 @@ func dbInit() database.SqlHandler {
 		// Golangはローカルのdocker-compose or  VSCodeで起動
 		// MySQLはローカルでdockerを使用せずに起動
 		if user == "" {
-			user = "root"
+			// ローカルの環境や準備によってはrootの方が良い可能性あり
+			user = "user"
 		}
 		dbUrl = "localhost"
-		dbName = os.Getenv("MYSQL_DATABASE")
+		dbName = "db"
+		pw = "password"
 	} else {
 		fmt.Println("common.hoge : false ")
 
@@ -92,7 +92,7 @@ func dbInit() database.SqlHandler {
 		user = "user"
 		pw = "password"
 	}
-
+	// mysql -uroot -ppassword --host 127.0.0.1
 	path := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=true", user, pw, dbUrl, port, dbName)
 
 	fmt.Printf("path=%v \n", path)
@@ -111,8 +111,10 @@ func dbInit() database.SqlHandler {
 	return sqlHandler
 }
 
+var isDidDBMigration bool
+
 func (Db *SqlHandler) migration() {
-	// NOTE: v1, v2でなぜか２回migrationが走るので、それを防ぐためのフラグ
+	// NOTE: v1, v2で２回migrationが走るので、それを防ぐためのフラグ
 	if !isDidDBMigration {
 		fmt.Print("migratoin開始")
 		Db.Conn.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(
