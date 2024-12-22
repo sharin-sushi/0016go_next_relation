@@ -10,7 +10,7 @@ import type {
 } from "@/types/vtuber_content";
 import type { ContextType } from "@/types/server";
 import { YouTubePlayer } from "@/components/moviePlayer/YoutubePlayer";
-import { ConvertStringToTime, ExtractVideoId } from "@/util";
+import { convertStringToTime, extractVideoId } from "@/util";
 import { Layout } from "@/components/layout/Layout";
 import { VtuberDeleteTable } from "@/components/table/Vtuber";
 import { MovieDeleteTable } from "@/components/table/Movie";
@@ -82,7 +82,7 @@ export const DeletePage = ({ posts, isSignin }: Mypage) => {
         (movies) => movies.MovieUrl === toDeleteMovieUrl
       );
       if (foundMovie) {
-        const foundYoutubeId = ExtractVideoId(foundMovie.MovieUrl);
+        const foundYoutubeId = extractVideoId(foundMovie.MovieUrl);
         setCurrentVideoId(foundYoutubeId);
         setCurrentStart(1);
       }
@@ -95,7 +95,7 @@ export const DeletePage = ({ posts, isSignin }: Mypage) => {
         (karaoke) => karaoke.KaraokeId === toDeleteKaraokeId
       );
       if (foundKaraoke) {
-        const foundSingStart = ConvertStringToTime(foundKaraoke.SingStart);
+        const foundSingStart = convertStringToTime(foundKaraoke.SingStart);
         setCurrentStart(foundSingStart);
       }
     }

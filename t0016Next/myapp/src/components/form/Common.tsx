@@ -1,42 +1,41 @@
 import { ToClickTW } from "@/styles/tailwiind";
 
+interface SelectCrudContentProps {
+  contentType: string;
+  setContentType: (type: string) => void;
+}
+
 export const SelectCrudContent = ({
-  crudContentType,
-  setCrudContentType,
-}: any) => {
+  contentType,
+  setContentType,
+}: SelectCrudContentProps) => {
   return (
     <div className="w-full">
       <span className={`flex justify-center`}>データ種類の選択</span>
       <div id="select_data_type" className="flex justify-center">
         <button
-          onClick={() => setCrudContentType("vtuber")}
+          onClick={() => setContentType("vtuber")}
           className={`${ToClickTW.choice}  mx-2 
                     ${
-                      crudContentType === "vtuber"
-                        ? "bg-[#66a962]"
-                        : "bg-[#776D5C]"
+                      contentType === "vtuber" ? "bg-[#66a962]" : "bg-[#776D5C]"
                     } 
                     `}
         >
           VTuber
         </button>
         <button
-          onClick={() => setCrudContentType("movie")}
+          onClick={() => setContentType("movie")}
           className={`${ToClickTW.choice} mx-2
-                    ${
-                      crudContentType === "movie"
-                        ? "bg-[#66a962]"
-                        : "bg-[#776D5C]"
-                    }
+                    ${contentType === "movie" ? "bg-[#66a962]" : "bg-[#776D5C]"}
                     `}
         >
           動画(歌枠)
         </button>
         <button
-          onClick={() => setCrudContentType("karaoke")}
+          onClick={() => setContentType("karaoke")}
           className={`${ToClickTW.choice} mx-2
                     ${
-                      crudContentType === "karaoke"
+                      contentType === "karaoke"
                         ? "bg-[#66a962]"
                         : "bg-[#776D5C]"
                     }

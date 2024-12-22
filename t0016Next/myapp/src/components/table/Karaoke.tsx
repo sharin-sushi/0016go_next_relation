@@ -10,7 +10,7 @@ import axios from "axios";
 import Link from "next/link";
 
 import { domain } from "@/../env";
-import { ConvertStringToTime, ExtractVideoId } from "@/util";
+import { convertStringToTime, extractVideoId } from "@/util";
 import { shuffleArray } from "../SomeFunction";
 import { ReceivedKaraoke, FavoriteKaraoke } from "@/types/vtuber_content";
 import { ToDeleteContext } from "@/pages/crud/delete";
@@ -65,7 +65,7 @@ const columns: Column<ReceivedKaraoke>[] = [
           "https://" +
           row.original.MovieUrl +
           "&t=" +
-          ConvertStringToTime(row.original.SingStart);
+          convertStringToTime(row.original.SingStart);
         await navigator.clipboard.writeText(url);
         setIsDisplay(true);
         setTimeout(() => setIsDisplay(false), 2000);
@@ -78,7 +78,7 @@ const columns: Column<ReceivedKaraoke>[] = [
             onClick={() =>
               handleMovieClickYouTube(
                 row.original.MovieUrl,
-                ConvertStringToTime(row.original.SingStart)
+                convertStringToTime(row.original.SingStart)
               )
             }
           >
@@ -230,7 +230,7 @@ const PagenationReturnPostcolumns: Column<ReceivedKaraoke>[] = [
       const handleClickPlay = (post: ReceivedKaraoke) => {
         handleMovieClickYouTube(
           row.original.MovieUrl,
-          ConvertStringToTime(row.original.SingStart)
+          convertStringToTime(row.original.SingStart)
         );
         setSelectedPost(post);
       };
@@ -241,7 +241,7 @@ const PagenationReturnPostcolumns: Column<ReceivedKaraoke>[] = [
           "https://" +
           row.original.MovieUrl +
           "&t=" +
-          ConvertStringToTime(row.original.SingStart);
+          convertStringToTime(row.original.SingStart);
         await navigator.clipboard.writeText(url);
         setIsDisplay(true);
         setSelectedPost(row.original);
@@ -497,7 +497,7 @@ const ThinColumns: Column<ReceivedKaraoke>[] = [
           "https://" +
           row.original.MovieUrl +
           "&t=" +
-          ConvertStringToTime(row.original.SingStart);
+          convertStringToTime(row.original.SingStart);
         await navigator.clipboard.writeText(url);
         setIsDisplay(true);
         setTimeout(() => setIsDisplay(false), 2000);
@@ -510,7 +510,7 @@ const ThinColumns: Column<ReceivedKaraoke>[] = [
             onClick={() =>
               handleMovieClickYouTube(
                 row.original.MovieUrl,
-                ConvertStringToTime(row.original.SingStart)
+                convertStringToTime(row.original.SingStart)
               )
             }
           >
@@ -779,9 +779,9 @@ const deleteColumns: Column<ReceivedKaraoke>[] = [
       const { setCurrentVideoId, setCurrentStart } =
         useContext(ToDeleteContext);
       const clickHandler = (url: string, SingStart: string) => {
-        setCurrentVideoId(ExtractVideoId(url));
+        setCurrentVideoId(extractVideoId(url));
         // setTimeout(() => setCurrentStart(　// youtube iframバグ対策。再発に備えてコメントアウトで残しておく
-        ConvertStringToTime(SingStart);
+        convertStringToTime(SingStart);
         // ), 1450);
       };
       return (
@@ -869,7 +869,7 @@ const randam5columns: Column<ReceivedKaraoke>[] = [
       const handleClickSongName = (post: ReceivedKaraoke) => {
         handleMovieClickYouTube(
           post.MovieUrl,
-          ConvertStringToTime(post.SingStart)
+          convertStringToTime(post.SingStart)
         );
       };
 
@@ -879,7 +879,7 @@ const randam5columns: Column<ReceivedKaraoke>[] = [
           "https://" +
           row.original.MovieUrl +
           "&t=" +
-          ConvertStringToTime(row.original.SingStart);
+          convertStringToTime(row.original.SingStart);
         await navigator.clipboard.writeText(url);
         setIsDisplay(true);
         setTimeout(() => setIsDisplay(false), 2000);

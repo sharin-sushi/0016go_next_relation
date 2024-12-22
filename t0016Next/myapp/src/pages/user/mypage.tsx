@@ -15,7 +15,7 @@ import { VtuberTable } from "@/components/table/Vtuber";
 import { MovieTable } from "@/components/table/Movie";
 import { KaraokePagenatoinTable } from "@/components/table/Karaoke";
 import { YouTubePlayer } from "@/components/moviePlayer/YoutubePlayer";
-import { ExtractVideoId } from "@/util";
+import { extractVideoId } from "@/util";
 import { ContextType } from "@/types/server";
 import { NotLoggedIn } from "@/components/layout/Main";
 import { ToClickTW } from "@/styles/tailwiind";
@@ -55,7 +55,7 @@ const MyPage = ({ data, isSignin }: Mypage) => {
     data?.vtubers_movies_karaokes_u_created || ([] as ReceivedKaraoke[]);
 
   const handleMovieClickYouTube = (url: string, start: number) => {
-    setCurrentMovieId(ExtractVideoId(url));
+    setCurrentMovieId(extractVideoId(url));
     setStart(start);
   };
   const handleMovieClickYouTubeDemoMovie = () => {

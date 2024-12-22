@@ -22,10 +22,7 @@ import { ContextType } from "@/types/server";
 import Image from "next/image";
 import { TopPageNotice } from "@/features/notice/notice";
 import { checkLoggedin } from "@/util/webStrage/cookie";
-import {
-  ConvertStringToTime as convertStringToTime,
-  ExtractVideoId as extractVideoId,
-} from "@/util";
+import { convertStringToTime, extractVideoId } from "@/util";
 import { generateRandomNumber } from "@/components/SomeFunction";
 
 const pageName = "Top";

@@ -4,7 +4,7 @@ import { AxiosRequestConfig } from "axios";
 
 import type { ReceivedKaraoke } from "@/types/vtuber_content";
 import { YouTubePlayer } from "@/components/moviePlayer/YoutubePlayer";
-import { ConvertStringToTime, ExtractVideoId } from "@/util";
+import { convertStringToTime, extractVideoId } from "@/util";
 import { KaraokePagenatoinTable } from "@/components/table/Karaoke";
 import { Layout } from "@/components/layout/Layout";
 import { ContextType } from "@/types/server";
@@ -21,12 +21,12 @@ export default function SingsPage({ posts, isSignin }: PostsAndCheckSignin) {
   const karaokes = posts?.vtubers_movies_karaokes || ([] as ReceivedKaraoke[]);
 
   const primaryYoutubeUrl = "HcpFGZNusBw"; //船長　kORHSmXcYNc, 00:08:29
-  const primaryYoutubeStartTime = ConvertStringToTime("");
+  const primaryYoutubeStartTime = convertStringToTime("");
   const [currentMovieId, setCurrentMovieId] =
     useState<string>(primaryYoutubeUrl);
   const [start, setStart] = useState<number>(primaryYoutubeStartTime);
   const handleMovieClickYouTube = (url: string, start: number) => {
-    setCurrentMovieId(ExtractVideoId(url));
+    setCurrentMovieId(extractVideoId(url));
     setStart(start);
   };
 
