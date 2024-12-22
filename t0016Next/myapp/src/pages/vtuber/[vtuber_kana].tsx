@@ -8,7 +8,7 @@ import { Layout } from "@/components/layout/Layout";
 import { ToClickTW } from "@/styles/tailwiind";
 import type { ReceivedKaraoke, ReceivedMovie } from "@/types/vtuber_content";
 import { YouTubePlayer } from "@/components/moviePlayer/YoutubePlayer";
-import { ConvertStringToTime, ExtractVideoId } from "@/util";
+import { timeStringToSecondNum, extractVideoId } from "@/util";
 import { DropDownAllMovie } from "@/components/dropDown/Movie";
 import { NotFoundVtuber } from "@/components/layout/Main";
 import { GetServerSidePropsContext } from "next";
@@ -37,10 +37,10 @@ export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
   // TODO: ロジック正しいか確認。動画がkaraokesから選ばれてtimeが初期値になることはないか。動画は0番目や最終番目も選ばれるか。
   const url = "www.youtube.com/watch?v=kORHSmXcYNc"; // 船長
   const stringTime = "00:08:29"; // ピンクレディー メドレー
-  const primaryYoutubeUrl = ExtractVideoId(
+  const primaryYoutubeUrl = extractVideoId(
     karaokes[playKaraokeNumber]?.MovieUrl || url
   );
-  const primaryYoutubeStartTime = ConvertStringToTime(
+  const primaryYoutubeStartTime = timeStringToSecondNum(
     karaokes[playKaraokeNumber]?.SingStart || stringTime
   );
 
@@ -49,7 +49,7 @@ export default function VtuberOriginalPage({ posts, isSignin }: VtuberPage) {
   const [start, setStart] = useState<number>(primaryYoutubeStartTime);
 
   const handleMovieClickYouTube = (url: string, start: number) => {
-    setCurrentMovieId(ExtractVideoId(url));
+    setCurrentMovieId(extractVideoId(url));
     setStart(start);
   };
 

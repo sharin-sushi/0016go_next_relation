@@ -11,7 +11,7 @@ import type {
   ReceivedKaraoke,
 } from "@/types/vtuber_content";
 import { YouTubePlayer } from "@/components/moviePlayer/YoutubePlayer";
-import { ConvertStringToTime, ExtractVideoId } from "@/util";
+import { timeStringToSecondNum, extractVideoId } from "@/util";
 import { Layout } from "@/components/layout/Layout";
 import { VtuberTable } from "@/components/table/Vtuber";
 import { MovieTable } from "@/components/table/Movie";
@@ -45,11 +45,11 @@ const TopPage = ({ posts, isSignin }: TopPage) => {
   const movies: ReceivedMovie[] = posts?.vtubers_movies || [];
   const karaokes: ReceivedKaraoke[] = posts?.vtubers_movies_karaokes || [];
   const latestKaraokes: ReceivedKaraoke[] = posts?.latest_karaokes || [];
-  const [start, setStart] = useState<number>(ConvertStringToTime("00:06:45"));
+  const [start, setStart] = useState<number>(timeStringToSecondNum("00:06:45"));
   const [currentMovieId, setCurrentMovieId] = useState<string>("AlHRqSsF--8");
 
   const handleMovieClickYouTube = (url: string, start: number) => {
-    setCurrentMovieId(ExtractVideoId(url));
+    setCurrentMovieId(extractVideoId(url));
     setStart(start);
   };
 

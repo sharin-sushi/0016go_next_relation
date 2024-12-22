@@ -9,7 +9,7 @@ import type { ContextType } from "@/types/server";
 import { EditPageProps, EditForm } from "@/components/form/EditContentForm";
 import { Layout } from "@/components/layout/Layout";
 import { YouTubePlayer } from "@/components/moviePlayer/YoutubePlayer";
-import { ConvertStringToTime, ExtractVideoId } from "@/util";
+import { timeStringToSecondNum, extractVideoId } from "@/util";
 import { GestLogin } from "@/components/button/User";
 import { NotLoggedIn } from "@/components/layout/Main";
 import { checkLoggedin } from "@/util/webStrage/cookie";
@@ -37,7 +37,7 @@ export const EditPage = ({ posts, isSignin }: EditPageProps) => {
       (movies) => movies.MovieUrl === selectedMovie
     );
     if (foundMovie) {
-      const foundYoutubeId = ExtractVideoId(foundMovie.MovieUrl);
+      const foundYoutubeId = extractVideoId(foundMovie.MovieUrl);
       setCurrentVideoId(foundYoutubeId);
       setCurrentStart(1);
     }
@@ -57,7 +57,7 @@ export const EditPage = ({ posts, isSignin }: EditPageProps) => {
         (foundMovie) => foundMovie.KaraokeId === selectedKaraoke
       );
       if (foundKaraoke) {
-        const foundSingStart = ConvertStringToTime(foundKaraoke.SingStart);
+        const foundSingStart = timeStringToSecondNum(foundKaraoke.SingStart);
         setCurrentStart(foundSingStart);
       }
     }

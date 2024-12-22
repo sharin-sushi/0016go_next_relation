@@ -22,10 +22,7 @@ import { ContextType } from "@/types/server";
 import Image from "next/image";
 import { TopPageNotice } from "@/features/notice/notice";
 import { checkLoggedin } from "@/util/webStrage/cookie";
-import {
-  ConvertStringToTime as convertStringToTime,
-  ExtractVideoId as extractVideoId,
-} from "@/util";
+import { timeStringToSecondNum, extractVideoId } from "@/util";
 import { generateRandomNumber } from "@/components/SomeFunction";
 
 const pageName = "Top";
@@ -61,7 +58,7 @@ const Page = ({ posts }: TopPageProps) => {
   const primaryYoutubeUrl = extractVideoId(
     posts?.latest_karaokes[playKaraokeNumber].MovieUrl || url
   );
-  const primaryYoutubeStartTime = convertStringToTime(
+  const primaryYoutubeStartTime = timeStringToSecondNum(
     posts?.latest_karaokes[playKaraokeNumber].SingStart || stringTime
   );
   const [currentMovieId, setCurrentMovieId] =

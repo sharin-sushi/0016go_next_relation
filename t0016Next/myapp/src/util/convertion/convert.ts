@@ -1,4 +1,4 @@
-export const ConvertStringToTime = (SingStart: string): number => {
+export const timeStringToSecondNum = (SingStart: string): number => {
   const match = SingStart.match(/\d+/g);
   if (!match || match.length !== 3) {
     console.error("Invalid input format:", SingStart);
@@ -11,7 +11,7 @@ export const ConvertStringToTime = (SingStart: string): number => {
   return totalSeconds;
 };
 
-export const ExtractVideoId = (url: string): string => {
+export const extractVideoId = (url: string): string => {
   const match = url.match(/v=([^&]+)/);
   if (match && match[1]) {
     return match[1];

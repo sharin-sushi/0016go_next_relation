@@ -7,7 +7,7 @@ import type { ReceivedMovie, ReceivedKaraoke } from "@/types/vtuber_content";
 import type { ContextType } from "@/types/server";
 import { Layout } from "@/components/layout/Layout";
 import { YouTubePlayer } from "@/components/moviePlayer/YoutubePlayer";
-import { ConvertStringToTime, ExtractVideoId } from "@/util";
+import { timeStringToSecondNum, extractVideoId } from "@/util";
 import {
   CreateForm,
   CreatePageProps,
@@ -39,7 +39,7 @@ export const CreatePage = ({ posts, isSignin }: CreatePageProps) => {
       (movies) => movies.MovieUrl === selectedMovie
     );
     if (foundMovie) {
-      const foundYoutubeId = ExtractVideoId(foundMovie.MovieUrl);
+      const foundYoutubeId = extractVideoId(foundMovie.MovieUrl);
       setCurrentVideoId(foundYoutubeId);
       setCurrentStart(1);
     }
@@ -60,7 +60,7 @@ export const CreatePage = ({ posts, isSignin }: CreatePageProps) => {
         (foundMovie) => foundMovie.KaraokeId === selectedKaraoke
       );
       if (foundKaraoke) {
-        const foundSingStart = ConvertStringToTime(foundKaraoke.SingStart);
+        const foundSingStart = timeStringToSecondNum(foundKaraoke.SingStart);
         setCurrentStart(foundSingStart);
       }
     }
@@ -105,6 +105,7 @@ export const CreatePage = ({ posts, isSignin }: CreatePageProps) => {
                 setSelectedMovie={setSelectedMovie}
                 setSelectedKaraoke={setSelectedKaraoke}
                 clearMovieHandler={clearMovieHandler}
+                setCurrentVideoId={setCurrentVideoId}
               />
             </div>
           </div>
