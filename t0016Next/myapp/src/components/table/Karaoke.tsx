@@ -973,7 +973,7 @@ export const KaraokeMinRandamTable = ({
         <div>
           <div className="flex ml-5 ">
             <h2 className="flex mr-1">
-              ランダム5件表示中 (登録数{posts.length}件)
+              ランダム5件表示中 (登録数{posts?.length}件)
             </h2>
           </div>
           <div className="w-full overflow-scroll md:overflow-hidden">

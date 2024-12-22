@@ -27,7 +27,7 @@ export function MovieTable({
   posts,
   handleMovieClickYouTube,
 }: MovieTableProps) {
-  const data = posts || {};
+  const data = posts || [];
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data }, useSortBy, useRowSelect);
 
