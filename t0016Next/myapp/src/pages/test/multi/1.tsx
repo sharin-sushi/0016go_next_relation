@@ -49,7 +49,7 @@ export default function App({ posts, isSignin }: TopPage) {
       setData(await vtubers);
     };
     fetchData();
-  }, [posts.vtubers]);
+  }, [posts?.vtubers]);
 
   const columns = useMemo(() => VtuberCOLUMNS4, []);
 
