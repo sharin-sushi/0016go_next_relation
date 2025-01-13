@@ -3,7 +3,7 @@ import { useTable, useSortBy, Column, useRowSelect } from "react-table";
 import Link from "next/link";
 
 import { domain } from "@/../env";
-import { ExtractVideoId } from "@/util";
+import { extractVideoId } from "@/util";
 import axios from "axios";
 import { ReceivedMovie, FavoriteMovie } from "@/types/vtuber_content";
 import { ToDeleteContext } from "@/pages/crud/delete";
@@ -27,7 +27,7 @@ export function MovieTable({
   posts,
   handleMovieClickYouTube,
 }: MovieTableProps) {
-  const data = posts || {};
+  const data = posts || [];
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data }, useSortBy, useRowSelect);
 
@@ -329,7 +329,7 @@ const deleteColumns: Column<ReceivedMovie>[] = [
       const { setCurrentVideoId, setCurrentStart } =
         useContext(ToDeleteContext); //表示ページにyoutubeのカレントデータを渡す
       const handleClick = (url: string, start: number) => {
-        setCurrentVideoId(ExtractVideoId(url));
+        setCurrentVideoId(extractVideoId(url));
         setCurrentStart(start);
       };
       return (

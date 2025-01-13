@@ -13,7 +13,7 @@ import type {
 } from "@/types/vtuber_content";
 import type { ContextType } from "@/types/server";
 import { YouTubePlayer } from "@/components/moviePlayer/YoutubePlayer";
-import { ConvertStringToTime, ExtractVideoId } from "@/util";
+import { timeStringToSecondNum, extractVideoId } from "@/util";
 import { DropDownVtuber } from "@/components/dropDown/Vtuber";
 import { DropDownMovie } from "@/components/dropDown/Movie";
 import KaraokeGlobalFilterTable from "@/components/table-tanstack/Karaoke/KaraokeGlobalFilterTable";
@@ -40,12 +40,12 @@ export default function SingsPage({ posts, isSignin }: TopPage) {
 
   // ようつべ用
   const primaryYoutubeUrl = "5WzeYsoGCZc"; //船長　kORHSmXcYNc, 00:08:29
-  const primaryYoutubeStartTime = ConvertStringToTime("00:22:04");
+  const primaryYoutubeStartTime = timeStringToSecondNum("00:22:04");
   const [currentMovieId, setCurrentMovieId] =
     useState<string>(primaryYoutubeUrl);
   const [start, setStart] = useState<number>(primaryYoutubeStartTime);
   const handleMovieClickYouTube = (url: string, start: number) => {
-    setCurrentMovieId(ExtractVideoId(url));
+    setCurrentMovieId(extractVideoId(url));
     setStart(start);
   };
 

@@ -11,7 +11,7 @@ type Options = {
 type DropDownKaraokeProps = {
   posts: BasicDataProps;
   selectedMovie: string;
-  onKaraokeSelect: (value: number) => void;
+  onKaraokeSelect: (karoakeId: number) => void;
 };
 
 // karaoke_list用

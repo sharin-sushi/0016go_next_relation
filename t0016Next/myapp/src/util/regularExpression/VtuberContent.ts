@@ -5,7 +5,18 @@ const vtuberKanaPattern = /^[a-z]+(_[a-z]*)?$/;
 const introMovieUrlPattern =
   /^www\.youtube\.com\/watch\?v=[a-zA-Z0-9_\-]{11}(&t=[0-9]+[s]?)?$/;
 const movieTitlePattern = /^.{2,100}$/;
-const MovieUrlPattern = /^www\.youtube\.com\/watch\?v=[a-zA-Z0-9_\-]{11}$/;
+export const MovieUrlPattern =
+  /(^(https:\/\/)??(www\.youtube\.com\/watch\?v=|www\.youtube\.com\/live\/|youtu\.be\/)[a-zA-Z0-9_\-]{11}(&t=\d+)??$)|(^[a-zA-Z0-9_\-]{11}$)/;
+// TODO: testコードを書く
+// NOTE: 想定している入力値
+// https://youtu.be/SHF-EJiC9qk
+// youtu.be/JXEyM8oZyhg
+// https://www.youtube.com/watch?v=gwgo01UVPvY&t=1342
+// www.youtube.com/watch?v=77lB1lMNOvY&t=1342
+// R6w92OanMD8
+// https://www.youtube.com/live/4OnkujqOMx4
+// www.youtube.com/live/CsOHuZLRQOs
+
 const songNamePattern = /^.{1,100}$/;
 const singStartPattern = /^[0-9]{2}:[0-9]{2}:[0-9]{2}$/;
 
@@ -57,7 +68,7 @@ export const ValidateCreate = {
     pattern: {
       value: new RegExp(`(${MovieUrlPattern.source})`),
       // value: new RegExp(`(${YouTubeUrlPattern.source})|(${VideoIdPattern.source})`),
-      message: "www.youtube.com/watch?v=XxxXxxXxxXx の形式で入力してください。",
+      message: "入力値エラー",
       // message: "https://www.youtube.com/watch?v=OB8pMKU3uxo \n www.youtube.com/watch?v=OB8pMKU3uxo \n v=OB8pMKU3uxo \n のいずれかの形式で入力してください。",
     },
   },
@@ -65,7 +76,7 @@ export const ValidateCreate = {
     required: true,
     pattern: {
       value: new RegExp(`(${songNamePattern.source})`),
-      message: "必須項目です。",
+      message: "必須項目です",
     },
   },
   SingStart: {

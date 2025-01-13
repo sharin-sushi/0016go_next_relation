@@ -9,7 +9,7 @@ import { DropDownMovie } from "@/components/dropDown/Movie";
 import { ValidateEdit } from "@/util";
 import { FormTW, ToClickTW } from "@/styles/tailwiind";
 import { DropDownKaraoke } from "../dropDown/Karaoke";
-import { SelectCrudContent } from "@/components/form/Common";
+import { CrudContentSelector } from "@/components/form/Common";
 import router from "next/router";
 
 export type EditPageProps = {
@@ -68,19 +68,23 @@ export function EditForm({
   );
 
   const [vtuberNameInput, setVtuberNameInput] = useState(
-    foundVtuber?.VtuberName
+    foundVtuber?.VtuberName ?? ""
   );
   const [VtuberKanaInput, setVtuberKanaInput] = useState(
-    foundVtuber?.VtuberKana
+    foundVtuber?.VtuberKana ?? ""
   );
   const [IntroMovieUrInput, setIntroMovieUrInput] = useState(
-    foundVtuber?.IntroMovieUrl
+    foundVtuber?.IntroMovieUrl ?? ""
   );
   const [MovieTitleInput, setMovieTitleInput] = useState(
-    foundMovie?.MovieTitle
+    foundMovie?.MovieTitle ?? ""
   );
-  const [SingStartInput, setSingStartInput] = useState(foundKaraoke?.SingStart);
-  const [SongNameInput, setSongNameInput] = useState(foundKaraoke?.SongName);
+  const [SingStartInput, setSingStartInput] = useState(
+    foundKaraoke?.SingStart ?? ""
+  );
+  const [SongNameInput, setSongNameInput] = useState(
+    foundKaraoke?.SongName ?? ""
+  );
 
   const [crudContentType, setCrudContentType] = useState<string>("karaoke");
 
@@ -179,9 +183,9 @@ export function EditForm({
     >
       <div id="selectContent" className="w-full mx-1 md:mx-3 ">
         <div className="flex flex-col justify-center w-full text-black font-bold">
-          <SelectCrudContent
-            crudContentType={crudContentType}
-            setCrudContentType={setCrudContentType}
+          <CrudContentSelector
+            contentType={crudContentType}
+            setContentType={setCrudContentType}
           />
         </div>
       </div>

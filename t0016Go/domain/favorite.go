@@ -2,7 +2,7 @@ package domain
 
 import "gorm.io/gorm"
 
-//// like_reration
+// // like_relation
 type Favorite struct {
 	gorm.Model
 	ListenerId `gorm:"type:int(11);uniqueIndex:favorite_uq;not null"`
