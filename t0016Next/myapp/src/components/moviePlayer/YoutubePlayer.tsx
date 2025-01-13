@@ -33,7 +33,7 @@ export const YouTubePlayer = ({
       const height = 255;
       const width = Math.round(height / aspectRatio);
       return (
-        <div className="">
+        <div>
           {hasWindow && (
             <div>
               <PreYouTubePlayer
@@ -69,7 +69,7 @@ export const YouTubePlayer = ({
       const height = 255;
       const width = Math.round(height / aspectRatio);
       return (
-        <div className="">
+        <div>
           {hasWindow && (
             <div>
               <PreYouTubePlayer

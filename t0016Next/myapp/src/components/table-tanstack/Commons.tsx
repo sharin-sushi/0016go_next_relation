@@ -10,7 +10,7 @@ import { domain } from "@/../env";
 import { ReceivedKaraoke, FavoriteKaraoke } from "@/types/vtuber_content";
 import { LinkTW, TableCss as TableTW } from "@/styles/tailwiind";
 import { SigninContext } from "@/components/layout/Layout";
-import { stringToTime } from "@/util";
+import { timeStringToSecondNum } from "@/util";
 import { TableCss } from "@/styles/tailwiind";
 import type {
   FavoriteColumn,
@@ -156,7 +156,7 @@ export const KaraokeBasicColumuns: ColumnDef<ReceivedKaraoke>[] = [
       const handleClickPlay = (post: ReceivedKaraoke) => {
         handleMovieClickYouTube(
           row.original.MovieUrl,
-          stringToTime(row.original.SingStart)
+          timeStringToSecondNum(row.original.SingStart)
         );
         setSelectedPost(post);
       };
@@ -167,7 +167,7 @@ export const KaraokeBasicColumuns: ColumnDef<ReceivedKaraoke>[] = [
           "https://" +
           row.original.MovieUrl +
           "&t=" +
-          stringToTime(row.original.SingStart);
+          timeStringToSecondNum(row.original.SingStart);
         await navigator.clipboard.writeText(url);
         setIsDisplay(true);
         setSelectedPost(row.original);

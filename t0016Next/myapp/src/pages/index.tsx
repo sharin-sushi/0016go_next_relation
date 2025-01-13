@@ -44,13 +44,13 @@ const TopPage = ({ posts, isSignin }: TopPageProps) => {
       <div className="pt-1">
         <TitleGroup />
         <TopPageNotice />
-        <Page posts={posts} isSignin={isSignin} />
+        <MainItem posts={posts} isSignin={isSignin} />
       </div>
     </Layout>
   );
 };
 
-const Page = ({ posts }: TopPageProps) => {
+const MainItem = ({ posts }: TopPageProps) => {
   const url = "www.youtube.com/watch?v=E7x2TZ1_Ys4"; // 【オフコラボ】#VTuberカラオケ女子会 ～ノイタミナアニメ縛り～【朝ノ瑠璃／久遠たま／柾花音／ChumuNote】
   const stringTime = "36 * 60 + 41"; //  (柾花音) Departures 〜あなたにおくるアイの歌〜 / EGOIST / TVアニメ『ギルティクラウン』ED
   const playKaraokeNumber = generateRandomNumber(posts?.latest_karaokes.length);

@@ -754,7 +754,7 @@ const deleteColumns: Column<ReceivedKaraoke>[] = [
     accessor: "VtuberName",
     Cell: ({ row }: { row: { original: ReceivedKaraoke } }) => {
       return (
-        <span key={row.original.VtuberId} className="relative">
+        <span key={row.original.KaraokeId} className="relative">
           <Link
             href={`/vtuber/${row.original.VtuberKana}`}
             className={`flex ${LinkTW.base}`}
