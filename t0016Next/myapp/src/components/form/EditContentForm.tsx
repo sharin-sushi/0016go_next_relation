@@ -9,7 +9,7 @@ import { DropDownMovie } from "@/components/dropDown/Movie";
 import { ValidateEdit } from "@/util";
 import { FormTW, ToClickTW } from "@/styles/tailwiind";
 import { DropDownKaraoke } from "../dropDown/Karaoke";
-import { SelectCrudContent } from "@/components/form/Common";
+import { CrudContentSelector } from "@/components/form/Common";
 import router from "next/router";
 
 export type EditPageProps = {
@@ -183,7 +183,7 @@ export function EditForm({
     >
       <div id="selectContent" className="w-full mx-1 md:mx-3 ">
         <div className="flex flex-col justify-center w-full text-black font-bold">
-          <SelectCrudContent
+          <CrudContentSelector
             contentType={crudContentType}
             setContentType={setCrudContentType}
           />

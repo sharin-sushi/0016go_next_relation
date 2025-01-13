@@ -3,7 +3,7 @@ import Select from "react-select";
 import type { BasicDataProps, ReceivedMovie } from "@/types/vtuber_content";
 import { DropStyle } from "./common";
 
-// DropDinwMo, Kaについは、on~~Seletがnillとか0なら処理を止めべき
+// DropDonwMo, Kaについは、on~~Seletがnillとか0なら処理を止めべき
 type MovieOptions = {
   value: string;
   label: string;
@@ -12,7 +12,7 @@ type MovieOptions = {
 type DropDownMovieProps = {
   posts: BasicDataProps;
   selectedVtuber: number;
-  setSelectedMovie: (value: string) => void;
+  setSelectedMovie: (movieUrl: string) => void;
   clearMovieHandler: () => void;
 };
 

@@ -5,6 +5,7 @@ export type BasicDataProps = {
 	vtubers_movies: ReceivedMovie[];
 	vtubers_movies_karaokes: ReceivedKaraoke[];
 };
+export type CrudContentType = "none" | "vtuber" | "movie" | "karaoke";
 
 export type CrudDate = {
 	VtuberId: number;

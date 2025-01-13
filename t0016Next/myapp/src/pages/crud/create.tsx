@@ -3,20 +3,26 @@ import https from "https";
 import axios, { AxiosRequestConfig } from "axios";
 
 import { domain } from "@/../env";
-import type { ReceivedMovie, ReceivedKaraoke } from "@/types/vtuber_content";
+import type {
+  ReceivedMovie,
+  ReceivedKaraoke,
+  BasicDataProps,
+} from "@/types/vtuber_content";
 import type { ContextType } from "@/types/server";
 import { Layout } from "@/components/layout/Layout";
 import { YouTubePlayer } from "@/components/moviePlayer/YoutubePlayer";
 import { timeStringToSecondNum, extractVideoId } from "@/util";
-import {
-  CreateForm,
-  CreatePageProps,
-} from "@/components/form/CreateContentForm";
+import { CreateForm } from "@/components/form/CreateContentForm";
 import { NotLoggedIn } from "@/components/layout/Main";
 import { checkLoggedin } from "@/util/webStrage/cookie";
 import { CreateContentFormDescription } from "@/features/description";
 
 const pageName = "コンテンツ登録";
+
+type CreatePageProps = {
+  posts: BasicDataProps;
+  isSignin: boolean;
+};
 
 export const CreatePage = ({ posts, isSignin }: CreatePageProps) => {
   const movies = useMemo(
@@ -28,22 +34,22 @@ export const CreatePage = ({ posts, isSignin }: CreatePageProps) => {
     [posts]
   );
 
-  const [selectedVtuber, setSelectedVtuber] = useState<number>(0);
-  const [selectedMovie, setSelectedMovie] = useState<string>("");
-  const [selectedKaraoke, setSelectedKaraoke] = useState<number>(0);
+  const [selectedVtuberId, setSelectedVtuberId] = useState<number>(0);
+  const [selectedMovieUrl, setSelectedMovieUrl] = useState<string>("");
+  const [selectedKaraokeId, setSelectedKaraokeId] = useState<number>(0);
   const [currentVideoId, setCurrentVideoId] = useState<string>("9ehwhQJ50gs");
   const [currentStart, setCurrentStart] = useState<number>(0);
 
   useEffect(() => {
     const foundMovie = movies.find(
-      (movies) => movies.MovieUrl === selectedMovie
+      (movies) => movies.MovieUrl === selectedMovieUrl
     );
     if (foundMovie) {
       const foundYoutubeId = extractVideoId(foundMovie.MovieUrl);
       setCurrentVideoId(foundYoutubeId);
       setCurrentStart(1);
     }
-  }, [movies, selectedMovie]);
+  }, [movies, selectedMovieUrl]);
 
   const clearMovieHandler = () => {
     //中身空でもKaraokeのoptinosを空にしてくれるんだが…
@@ -52,19 +58,19 @@ export const CreatePage = ({ posts, isSignin }: CreatePageProps) => {
   };
 
   useEffect(() => {
-    if (selectedVtuber && selectedMovie && selectedKaraoke) {
+    if (selectedVtuberId && selectedMovieUrl && selectedKaraokeId) {
       const foundMovies = karaokes.filter(
-        (karaoke) => karaoke.MovieUrl === selectedMovie
+        (karaoke) => karaoke.MovieUrl === selectedMovieUrl
       );
       const foundKaraoke = foundMovies.find(
-        (foundMovie) => foundMovie.KaraokeId === selectedKaraoke
+        (foundMovie) => foundMovie.KaraokeId === selectedKaraokeId
       );
       if (foundKaraoke) {
         const foundSingStart = timeStringToSecondNum(foundKaraoke.SingStart);
         setCurrentStart(foundSingStart);
       }
     }
-  }, [selectedMovie, selectedKaraoke, selectedVtuber, karaokes]);
+  }, [selectedMovieUrl, selectedKaraokeId, selectedVtuberId, karaokes]);
 
   if (!isSignin) {
     return (
@@ -98,12 +104,12 @@ export const CreatePage = ({ posts, isSignin }: CreatePageProps) => {
             <div className="mt-1">
               <CreateForm
                 posts={posts}
-                selectedVtuber={selectedVtuber}
-                selectedMovie={selectedMovie}
-                selectedKaraoke={selectedKaraoke}
-                setSelectedVtuber={setSelectedVtuber}
-                setSelectedMovie={setSelectedMovie}
-                setSelectedKaraoke={setSelectedKaraoke}
+                selectedVtuberId={selectedVtuberId}
+                selectedMovieUrl={selectedMovieUrl}
+                selectedKaraokeId={selectedKaraokeId}
+                setSelectedVtuberId={setSelectedVtuberId}
+                setSelectedMovieUrl={setSelectedMovieUrl}
+                setSelectedKaraokeId={setSelectedKaraokeId}
                 clearMovieHandler={clearMovieHandler}
                 setCurrentVideoId={setCurrentVideoId}
               />

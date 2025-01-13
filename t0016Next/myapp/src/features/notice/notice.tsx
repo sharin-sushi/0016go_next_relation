@@ -84,6 +84,15 @@ type NoticeItem = {
 
 const NoticeItems: NoticeItem[] = [
   {
+    data: "2024-01-13",
+    content: (
+      <>
+        <NoticeLink href="/crud//create">「データ登録」</NoticeLink>
+        ページの動画登録にて、URLで動画タイトルを取得できるように
+      </>
+    ),
+  },
+  {
     data: "2024-12-15",
     content:
       "TOPページ : 自動再生される曲が「最近登録された50曲」から選択されるように",

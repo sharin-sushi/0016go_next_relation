@@ -32,10 +32,12 @@ export const ToClickTW = {
   regular:
     "bg-[#776D5C] hover:bg-[#575044] hover:cursor-pointer text-white font-semibold rounded-md p-1",
   formButton:
-    "bg-[#B7A692] text-white font-semibold rounded-md p-1 shadow-sm shadow-black hover:shadow-inner hover:shadow-[#FFF6E4]",
+    "bg-[#B7A692] text-white font-semibold rounded-md p-1 shadow-sm shadow-black hover:shadow-none",
   textSize: "bg-[#776D5C] text-white font-semibold rounded-md",
-  nomarlButton:
-    "bg-[#776D5C] text-white font-semibold rounded-md p-1 shadow-sm shadow-black hover:shadow-inner hover:shadow-[#FFF6E4]",
+  buttonNormal:
+    "bg-[#B7A893] hover:bg-[#776D5C] px-1 h-6 text-white rounded-md shadow-sm shadow-black hover:shadow-none",
+  buttonSm:
+    "text-white text-sm rounded-md shadow-sm shadow-black hover:shadow-inner hover:shadow-[#FFF6E4]",
   textSize: "bg-[#776D5C] text-white font-semibold rounded-md",
   choice:
     "md:hover:bg-[#657261] border border-[#575044] text-white font-semibold " +
@@ -59,7 +61,8 @@ export const YouTubeTW = {
 
 export const FormTW = {
   need: "bg-[#ff0000] text-white text-[10px] font-bold px-0.5 py-0 rounded-md h-4",
-  label: "block text-gray-700 text-sm font-bold ",
+  auto: "bg-[#ff5555] text-white text-[10px] font-bold px-0.5 py-0 rounded-md h-4",
+  label: "block text-gray-700 text-base font-bold ",
   // horizon: "border-[#2e9836] border-2 mx-10 my-2",
   horizon: "border-[#66a962] border-2 mx-10 my-2",
 };
