@@ -8,8 +8,6 @@ import type {
   BasicDataProps,
   CrudContentType,
   ReceivedVtuber,
-  ReceivedMovie,
-  ReceivedKaraoke,
 } from "@/types/vtuber_content";
 import { DropDownVtuber } from "@/components/dropDown/Vtuber";
 import { DropDownMovie } from "@/components/dropDown/Movie";
@@ -69,6 +67,8 @@ export function CreateForm({
   const [vtubers, setVtubers] = useState(posts.vtubers);
   const [movies, setMovies] = useState(posts.vtubers_movies);
   const [karaokes, setKaraokes] = useState(posts.vtubers_movies_karaokes);
+  const [isOkVideoTitle, setIsOkVideoTitle] = useState(false);
+  const [isAbleVideoTitleInput, setIsAbleVideoTitleInput] = useState(false);
 
   const foundVtuber = vtubers?.find(
     (vtuber) => vtuber.VtuberId === selectedVtuberId
@@ -80,6 +80,7 @@ export function CreateForm({
     (karaoke) => karaoke.KaraokeId === selectedKaraokeId
   );
 
+  // TODO: 本来不要なはずなのでinputに使うuseStateは消していきたい
   const [vtuberNameInput, setVtuberNameInput] = useState(
     foundVtuber?.VtuberName ?? ""
   );
@@ -120,6 +121,8 @@ export function CreateForm({
     register,
     handleSubmit,
     formState: { errors },
+    watch,
+    setValue,
   } = useForm<CrudDate>({ reValidateMode: "onChange" });
 
   const [gotMovieErrorMessage, setGotMovieErrorMessage] = useState<string>("");
@@ -128,16 +131,23 @@ export function CreateForm({
     e.preventDefault();
     e.stopPropagation();
 
-    if (MovieUrlInput != null && MovieUrlInput != "") {
-      const movieId = MovieUrlInput.split("watch?v=")[1];
+    if (MovieUrlInput != "") {
+      const videoYtId = extractVideoId(MovieUrlInput);
       try {
-        const res = await getYoutubeVideo({ movieId, isSnippet: true });
+        const res = await getYoutubeVideo({
+          movieId: videoYtId,
+          isSnippet: true,
+        });
         if (res) {
           console.log(`res %o`, res.items[0].snippet);
-          setMovieTitleInput(res.items[0].snippet.title);
+          const title = res.items[0].snippet.title;
+          setMovieTitleInput(title);
+          setValue("MovieTitle", title);
+          setIsOkVideoTitle(true);
         }
       } catch (err) {
         setMovieTitleInput("");
+        setIsOkVideoTitle(false);
         setGotMovieErrorMessage(
           "動画タイトルの取得に失敗しました。一時的な不具合の可能性があります。お手数ですが手入力も検討してください。"
         );
@@ -150,11 +160,24 @@ export function CreateForm({
     }
   };
 
+  const handleChangeInputMovieUrl = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setIsOkVideoTitle(false);
+    setMovieTitleInput("");
+
+    const id = extractVideoId(e.target.value);
+    if (id === "") return;
+
+    setMovieUrlInput(
+      "www.youtube.com/watch?v=" + extractVideoId(e.target.value)
+    );
+  };
+
   const onSubmit = async (CrudData: CrudDate) => {
-    console.log(crudContentType);
+    console.log("onSubmit");
     switch (crudContentType) {
       case "vtuber":
-        console.log("vtuber");
         try {
           const reqBody: CreateVtuber = {
             VtuberName: CrudData.VtuberName,
@@ -171,11 +194,23 @@ export function CreateForm({
 
       case "movie":
         console.log("movie");
+        if (!isOkVideoTitle && !isAbleVideoTitleInput) {
+          alert(
+            "動画タイトルを自動取得するか、手入力チェックボックスを記入して手入力してください"
+          );
+          return;
+        }
+
+        if (selectedVtuberId == 0) {
+          alert("VTuberを選択してください");
+          return;
+        }
+
         try {
           const reqBody: CreateMovie = {
             VtuberId: selectedVtuberId, //既存値
-            MovieTitle: CrudData.MovieTitle,
-            MovieUrl: CrudData.MovieUrl,
+            MovieTitle: MovieTitleInput,
+            MovieUrl: MovieUrlInput,
           };
           await axiosClient.post("/create/movie", reqBody);
           openSuccessModal();
@@ -184,8 +219,8 @@ export function CreateForm({
           console.error(err);
         }
         return;
+
       case "karaoke":
-        console.log("karaoke");
         try {
           const reqBody: CreateKaraoke = {
             MovieUrl: selectedMovieUrl, //既存値
@@ -201,8 +236,8 @@ export function CreateForm({
         return;
 
       default:
-        console.log(
-          "データの種類(vtuber, movie, karaoke)の選択で想定外のエラーが発生しました。"
+        console.error(
+          "データの種類(vtuber, movie, karaoke)の選択エラーです。１度ページを更新してください。"
         );
     }
   };
@@ -220,7 +255,7 @@ export function CreateForm({
       <hr className={`${FormTW.horizon}`} />
 
       <div id="form" className="flex flex-col">
-        <div>
+        <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col">
             {crudContentType === "vtuber" && (
               <div className="flex flex-col">
@@ -307,8 +342,13 @@ export function CreateForm({
                   </h2>
                   <div className="flex flex-col gap-y-3">
                     <div>
-                      <FormLabel label="動画URL" need />
-                      <div className="flex gap-x-1 mb-1"></div>
+                      <div className="flex gap-x-1 mb-1">
+                        <FormLabel
+                          label="動画URL"
+                          bodyNote={<InputMovieUrlHintBox />}
+                          need
+                        />
+                      </div>
                       <input
                         className={`${ToClickTW.input}`}
                         {...register("MovieUrl", ValidateCreate.MovieUrl)}
@@ -316,7 +356,7 @@ export function CreateForm({
                           foundMovie?.MovieUrl ||
                           "例: www.youtube.com/watch?v=AlHRqSsF--8"
                         }
-                        onChange={(e) => setMovieUrlInput(e.target.value)}
+                        onChange={handleChangeInputMovieUrl}
                       />
                       <div className="flex gap-x-1">
                         <button
@@ -337,12 +377,28 @@ export function CreateForm({
                       <span className="text-red-500">
                         {gotMovieErrorMessage}
                       </span>
-                      ;
+
                       <ErrorMessage errorField={errors.MovieUrl} />
                     </div>
                     <div>
-                      <FormLabel label="動画タイトル" need />
+                      <div className="flex ">
+                        <FormLabel label="動画タイトル" need />
+                        <label
+                          className={`${ToClickTW.buttonNormal} flex items-center text-sm cursor-pointer`}
+                        >
+                          <input
+                            className="mr-1"
+                            type="checkbox"
+                            checked={isAbleVideoTitleInput}
+                            onChange={(e) =>
+                              setIsAbleVideoTitleInput(e.target.checked)
+                            }
+                          />
+                          手入力する
+                        </label>
+                      </div>
                       <input
+                        disabled={!isAbleVideoTitleInput}
                         className={`${ToClickTW.input}`}
                         value={MovieTitleInput}
                         {...register("MovieTitle", ValidateCreate.MovieTitle)}
@@ -400,9 +456,7 @@ export function CreateForm({
                     )}
                   </div>
                 </div>
-
                 <hr className={`${FormTW.horizon}`} />
-
                 <div id="decide" className=" ">
                   <div className="flex flex-col justify-center mt-1 my-3">
                     <span className="text-black text-center">
@@ -417,9 +471,7 @@ export function CreateForm({
                     />
                   </div>
                 </div>
-
                 <hr className={`${FormTW.horizon}`} />
-
                 <div className="flex flex-col">
                   <h2 className="text-black mx-auto">
                     登録するデータを入力してください
@@ -451,18 +503,20 @@ export function CreateForm({
               </>
             )}
           </div>
-
           <hr className={`${FormTW.horizon}`} />
 
           <div className="flex relative justify-center">
             <button
-              onClick={handleSubmit(onSubmit)}
+              onClick={() => handleSubmit(onSubmit)}
+              // onClick={() => {
+              //   console.log("onSubmit");
+              // }}
               className={`${ToClickTW.decide} m-4 w-[100px] `}
             >
               登録確定
             </button>
           </div>
-        </div>
+        </form>
 
         {isDisplaySuccessModal && (
           <div className="absolute z-40 bottom-[150px] left-[50%] -translate-x-[50%] h-52 w-[86%] md:w-96 bg-[#B7A692] p-2 pt-5 rounded-2xl shadow-lg shadow-black">
@@ -498,12 +552,14 @@ type FormLabelProps = {
   label: string;
   need?: boolean;
   autoForm?: boolean;
+  bodyNote?: React.ReactNode;
 };
 
-const FormLabel = ({ label, need, autoForm }: FormLabelProps) => {
+const FormLabel = ({ label, bodyNote, need, autoForm }: FormLabelProps) => {
   return (
     <div className={`${FormTW.label}`}>
       {label}
+      <div className="inline-flex">{bodyNote}</div>
       {need && <NeedBox />}
       {autoForm && <DisableBox />}
     </div>
@@ -522,10 +578,70 @@ const findVtuber = (vtubers: ReceivedVtuber[], vtuberId: number) => {
   return vtubers.find((vtuber) => vtuber.VtuberId === vtuberId);
 };
 
-const findMovie = (movies: ReceivedMovie[], movieUrl: string) => {
-  return movies.find((movie) => movie.MovieUrl === movieUrl);
-};
+const InputMovieUrlHintBox = () => {
+  const [isDisplay, setIsDisplay] = useState(false);
 
-const findKaraoke = (karaokes: ReceivedKaraoke[], karaokeId: number) => {
-  return karaokes.find((karaoke) => karaoke.KaraokeId === karaokeId);
+  return (
+    <div className="flex relative w-5 text-white ">
+      <div
+        className="flex absolute -top-5 text-xs justify-center rounded-md h-[16px] w-[15px] m-0.5 bg-[#B7A893] hover:bg-[#776D5C] shadow-sm shadow-black hover:shadow-none cursor-pointer"
+        onClick={() => setIsDisplay(true)}
+      >
+        ？
+      </div>
+      <></>
+
+      {isDisplay && (
+        <div className="fixed inset-0 flex items-center justify-center z-10">
+          <div
+            className="h-full w-full bg-black opacity-50"
+            onClick={() => setIsDisplay(false)}
+          />
+
+          <div className="absolute z-30 md:top-[150px] items-center min-w-[300px] md:min-w-[600px] md:max-w-3xl w-[90%] py-2 px-4 flex flex-col gap-y-1 bg-[#B7A692] rounded-2xl shadow-lg shadow-black">
+            <div className="w-32 self-start text-center rounded-t-md font-bold bg-[#776D5C]">
+              ヒント💡
+            </div>
+
+            <div className="flex flex-col overflow-y-auto h-60 text-black w-full">
+              <div className="bg-[#FFF6E4] h-full w-full rounded-b-md px-2">
+                V-Karaでは次のような書き方をURLとして認識できます。
+                <div className="flex flex-col gap-1 pl-3">
+                  <li>
+                    https://youtu.be/<u>SHF-EJiC9qk</u>
+                  </li>
+                  <li>
+                    youtu.be/<u>JXEyM8oZyhg</u>
+                  </li>
+                  <li>
+                    https://www.youtube.com/watch?v=<u>gwgo01UVPvY</u>&t=1342
+                  </li>
+                  <li>
+                    www.youtube.com/watch?v=<u>77lB1lMNOvY</u>&t=1342
+                  </li>
+                  <li>
+                    https://www.youtube.com/live/<u>4OnkujqOMx4</u>
+                  </li>
+                  <li>
+                    www.youtube.com/live/<u>CsOHuZLRQOs</u>
+                  </li>
+                  <li>
+                    <u>R6w92OanMD8</u>
+                  </li>
+                </div>
+              </div>
+            </div>
+            <div
+              className={`flex justify-center items-center w-[40%] h-10 rounded-md p-1 bg-[#776D5C] text-white font-semibold shadow-sm shadow-black hover:shadow-inner hover:shadow-[#FFF6E4]`}
+              onClick={() => {
+                setIsDisplay(false);
+              }}
+            >
+              閉じる
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };

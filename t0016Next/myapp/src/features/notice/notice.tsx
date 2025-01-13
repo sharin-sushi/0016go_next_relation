@@ -87,7 +87,7 @@ const NoticeItems: NoticeItem[] = [
     data: "2024-01-13",
     content: (
       <>
-        <NoticeLink href="/crud//create">「データ登録」</NoticeLink>
+        <NoticeLink href="/crud/create">「データ登録」</NoticeLink>
         ページの動画登録にて、URLで動画タイトルを取得できるように
       </>
     ),

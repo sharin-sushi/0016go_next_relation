@@ -35,7 +35,7 @@ export const ToClickTW = {
     "bg-[#B7A692] text-white font-semibold rounded-md p-1 shadow-sm shadow-black hover:shadow-none",
   textSize: "bg-[#776D5C] text-white font-semibold rounded-md",
   buttonNormal:
-    "bg-[#B7A893] hover:bg-[#776D5C] px-1 h-6 text-white rounded-md shadow-sm shadow-black hover:shadow-none",
+    "bg-[#B7A893] hover:bg-[#776D5C] px-1 h-6 text-white rounded-md shadow-sm shadow-black hover:shadow-none select-none",
   buttonSm:
     "text-white text-sm rounded-md shadow-sm shadow-black hover:shadow-inner hover:shadow-[#FFF6E4]",
   textSize: "bg-[#776D5C] text-white font-semibold rounded-md",
